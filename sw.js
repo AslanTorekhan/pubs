@@ -1,4 +1,4 @@
-const CACHE_NAME = 'plan-dep-2026-v6'; // Изменили версию на v3
+const CACHE_NAME = 'plan-dep-2026-v7'; // Изменили версию на v3
 const urlsToCache = [
   './',
   './index.html',
