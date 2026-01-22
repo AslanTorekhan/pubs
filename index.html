@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>План публикации 2026</title>
+    <title>План Департамента 2026</title>
     
     <link rel="manifest" href="manifest.json">
     <meta name="theme-color" content="#0984e3">
@@ -32,22 +32,11 @@
         .refresh-btn { background: none; border: none; color: white; font-size: 20px; cursor: pointer; padding: 5px; }
 
         .filter-container { position: relative; width: 100%; }
-        .filter-label { font-size: 12px; color: rgba(255,255,255,0.8); margin-bottom: 4px; display: block; font-weight: 500; }
         .filter-select {
-            width: 100%;
-            padding: 12px 15px;
-            font-size: 15px;
-            border: 1px solid rgba(255,255,255,0.3);
-            border-radius: 10px;
-            background: rgba(255, 255, 255, 0.15);
-            color: white;
-            appearance: none;
-            outline: none;
-            cursor: pointer;
-            backdrop-filter: blur(5px);
+            width: 100%; padding: 12px 15px; font-size: 15px; border: 1px solid rgba(255,255,255,0.3);
+            border-radius: 10px; background: rgba(255, 255, 255, 0.15); color: white; outline: none; cursor: pointer;
         }
         .filter-select option { background: white; color: var(--text-main); }
-        .filter-arrow { position: absolute; right: 15px; bottom: 12px; pointer-events: none; color: white; font-size: 12px; }
 
         .container { padding: 15px; max-width: 600px; margin: 0 auto; }
         
@@ -61,29 +50,26 @@
         .card-date { font-size: 13px; color: var(--text-sec); display: flex; align-items: center; gap: 5px; background: #f1f2f6; padding: 4px 8px; border-radius: 6px; }
         .status-badge { padding: 4px 8px; border-radius: 6px; font-size: 11px; font-weight: 600; color: white; background: var(--wait); }
 
+        /* БОКС ДЛЯ ОТОБРАЖЕНИЯ КОММЕНТАРИЕВ */
+        .comment-display {
+            margin-top: 10px;
+            background: #f8f9fa;
+            border-radius: 8px;
+            padding: 10px;
+            font-size: 13px;
+            color: #2d3436;
+            border-left: 3px solid #dfe6e9;
+            white-space: pre-line; /* Чтобы работали переносы строк */
+            display: none; /* Прячем, если пусто */
+        }
+        .comment-display.active { display: block; }
+
         .comment-section { margin-top: 12px; display: flex; gap: 8px; align-items: center; }
         .comment-input {
-            flex: 1;
-            padding: 10px 14px;
-            border: 1px solid #eee;
-            border-radius: 20px;
-            font-size: 14px;
-            outline: none;
-            background: #f9f9f9;
+            flex: 1; padding: 10px 14px; border: 1px solid #eee; border-radius: 20px; font-size: 14px; outline: none; background: #f9f9f9;
         }
-        .comment-input:focus { background: white; border-color: var(--accent); }
         .comment-btn {
-            background: var(--accent);
-            color: white;
-            border: none;
-            border-radius: 50%;
-            width: 38px;
-            height: 38px;
-            cursor: pointer;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            box-shadow: 0 2px 5px rgba(9, 132, 227, 0.3);
+            background: var(--accent); color: white; border: none; border-radius: 50%; width: 38px; height: 38px; cursor: pointer; display: flex; align-items: center; justify-content: center;
         }
 
         .card.status-wait { border-left-color: var(--wait); }
@@ -93,13 +79,8 @@
 
         #loader { text-align: center; padding: 40px; color: var(--text-sec); }
 
-        /* Модалка уведомлений */
         .modal { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.6); z-index: 1000; justify-content: center; align-items: center; backdrop-filter: blur(3px); }
         .modal-content { background: white; padding: 25px; border-radius: 20px; width: 85%; max-width: 320px; text-align: center; }
-        .modal-btn { background: var(--accent); color: white; border: none; padding: 12px 0; border-radius: 12px; margin-top: 20px; cursor: pointer; width: 100%; font-size: 16px; font-weight: 600; }
-
-        #installContainer { display: none; position: fixed; bottom: 25px; left: 50%; transform: translateX(-50%); z-index: 999; }
-        .install-btn { background: #2d3436; color: white; border: none; padding: 12px 24px; border-radius: 30px; font-weight: 600; cursor: pointer; display: flex; align-items: center; gap: 8px; }
     </style>
 </head>
 <body>
@@ -109,13 +90,10 @@
             <h1>План Департамента 2026</h1>
             <button class="refresh-btn" onclick="hardReload()">↻</button>
         </div>
-        
         <div class="filter-container">
-            <label class="filter-label">Отрасли:</label>
             <select id="categorySelect" class="filter-select" onchange="filterData(this.value)">
-                <option value="all">Все направления</option>
+                <option value="all">📂 Все Отрасли</option>
             </select>
-            <div class="filter-arrow">▼</div>
         </div>
     </header>
 
@@ -124,31 +102,21 @@
 
     <div id="notificationModal" class="modal">
         <div class="modal-content">
-            <h2 style="margin:0 0 15px 0; color:#d63031; font-size: 20px;">🔥 Срок сегодня!</h2>
-            <div id="modalListContent" style="text-align: left; font-size: 14px; color: #444;"></div>
-            <button class="modal-btn" onclick="closeModal()">Принято</button>
+            <h2 style="color:#d63031;">🔥 Срок сегодня!</h2>
+            <div id="modalListContent"></div>
+            <button style="width:100%; padding:12px; margin-top:15px; border:none; border-radius:10px; background:var(--accent); color:white;" onclick="closeModal()">Принято</button>
         </div>
     </div>
 
-    <div id="installContainer">
-        <button class="install-btn" onclick="installPWA()">📲 Установить</button>
-    </div>
-
 <script>
-    // 1. ССЫЛКИ
     const SHEET_CSV_URL = 'https://docs.google.com/spreadsheets/d/e/2PACX-1vSSiUUHVFLpn5WE5zwI7UOCNNz4gjENAX4ahMtDO7f8e_qvUpwTqtaBN0nfUzOU5unXMWvzwU5zhSkB/pub?output=csv';
-    const DEFAULT_URL = 'https://stat.gov.kz/ru/region/astana/spreadsheets/';
-    
-    // ВАША ССЫЛКА НА СКРИПТ (УЖЕ ВСТАВЛЕНА)
     const APPS_SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbxpDK0afwiRK9pBXeqt0vCStRzdvucCUgcWsbAsabJpXwbAj0aN3jId5aTqX2fqhJjWhg/exec';
 
     let allData = [];
     const currentYear = new Date().getFullYear();
 
     function hardReload() {
-        if ('caches' in window) {
-            caches.keys().then(names => names.forEach(name => caches.delete(name)));
-        }
+        if ('caches' in window) caches.keys().then(names => names.forEach(name => caches.delete(name)));
         location.reload(true);
     }
 
@@ -158,9 +126,7 @@
             header: false,
             skipEmptyLines: true,
             complete: function(results) {
-                if (results.data && results.data.length > 0) {
-                    parseData(results.data);
-                }
+                if (results.data && results.data.length > 0) parseData(results.data);
             }
         });
     }
@@ -176,6 +142,7 @@
             let startRaw = row[1] ? row[1].trim() : '';
             let endRaw = row[2] ? row[2].trim() : '';
             let linkRaw = row[3] ? row[3].trim() : ''; 
+            let commentRaw = row[4] ? row[4].trim() : ''; // Читаем 5-й столбец (E)
 
             if (name && !startRaw && !endRaw) {
                 currentCategory = name;
@@ -194,7 +161,8 @@
                     start: parseRusDate(startRaw),
                     end: endDate,
                     endTxt: endRaw,
-                    url: linkRaw || DEFAULT_URL
+                    url: linkRaw || 'https://stat.gov.kz/',
+                    comment: commentRaw
                 });
             }
         });
@@ -202,16 +170,13 @@
         document.getElementById('loader').style.display = 'none';
         generateFilters();
         renderCards('all');
-        setTimeout(checkNotifications, 1000); 
     }
 
     function parseRusDate(str) {
         if (!str) return null;
-        str = str.toLowerCase().replace(/\./g, ' ').replace(/\s+/g, ' ').trim();
+        str = str.toLowerCase().replace(/\./g, ' ').trim();
         const numericMatch = str.match(/^(\d{1,2})\s+(\d{1,2})/);
-        if (numericMatch) {
-            return new Date(currentYear, parseInt(numericMatch[2]) - 1, parseInt(numericMatch[1]));
-        }
+        if (numericMatch) return new Date(currentYear, parseInt(numericMatch[2]) - 1, parseInt(numericMatch[1]));
         const months = ["янв", "фев", "мар", "апр", "мая", "июн", "июл", "авг", "сен", "окт", "ноя", "дек"];
         const parts = str.split(' ');
         let mIdx = -1;
@@ -224,10 +189,10 @@
         const dEnd = new Date(end); dEnd.setHours(0,0,0,0);
         const dStart = start ? new Date(start) : dEnd; dStart.setHours(0,0,0,0);
 
-        if (now > dEnd) return { text: "ВЫПОЛНЕНО", class: "status-done", code: "done" };
-        if (now.getTime() === dEnd.getTime()) return { text: "СРОК СЕГОДНЯ", class: "status-today", code: "today" };
-        if (now >= dStart && now < dEnd) return { text: "В РАБОТЕ", class: "status-work", code: "work" };
-        return { text: "ОЖИДАНИЕ", class: "status-wait", code: "wait" };
+        if (now > dEnd) return { text: "ВЫПОЛНЕНО", class: "status-done" };
+        if (now.getTime() === dEnd.getTime()) return { text: "СРОК СЕГОДНЯ", class: "status-today" };
+        if (now >= dStart && now < dEnd) return { text: "В РАБОТЕ", class: "status-work" };
+        return { text: "ОЖИДАНИЕ", class: "status-wait" };
     }
 
     function renderCards(filterCat) {
@@ -248,8 +213,13 @@
                         <div class="status-badge">${status.text}</div>
                     </div>
                 </a>
+                
+                <div id="display-${item.name}" class="comment-display ${item.comment ? 'active' : ''}">
+                    <b>Заметки:</b><br>${item.comment}
+                </div>
+
                 <div class="comment-section">
-                    <input type="text" class="comment-input" id="com-${item.name}" placeholder="Ваш комментарий...">
+                    <input type="text" class="comment-input" id="com-${item.name}" placeholder="Написать комментарий...">
                     <button class="comment-btn" onclick="sendComment('${item.name.replace(/'/g, "\\'")}')">➤</button>
                 </div>
             `;
@@ -259,34 +229,26 @@
 
     function sendComment(itemName) {
         const input = document.getElementById(`com-${itemName}`);
+        const displayBox = document.getElementById(`display-${itemName}`);
         const text = input.value.trim();
         if (!text) return;
 
         const btn = input.nextElementSibling;
-        const originalIcon = btn.innerHTML;
         btn.innerHTML = "⏳";
-        btn.disabled = true;
 
-        // Отправка в Google Sheets
+        // Мгновенное отображение на экране (не дожидаясь таблицы)
+        const oldContent = displayBox.classList.contains('active') ? displayBox.innerHTML.split('<br>')[1] : "";
+        displayBox.innerHTML = `<b>Заметки:</b><br>${oldContent ? oldContent + '\n' : ''}✍️ ${text}`;
+        displayBox.classList.add('active');
+
         fetch(APPS_SCRIPT_URL, {
             method: 'POST',
             mode: 'no-cors',
-            cache: 'no-cache',
-            headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify({ name: itemName, comment: text })
         }).then(() => {
             input.value = "";
-            input.placeholder = "Отправлено!";
             btn.innerHTML = "✅";
-            setTimeout(() => { 
-                btn.innerHTML = originalIcon; 
-                btn.disabled = false;
-                input.placeholder = "Ваш комментарий...";
-            }, 2000);
-        }).catch(err => {
-            alert("Ошибка сети");
-            btn.innerHTML = originalIcon;
-            btn.disabled = false;
+            setTimeout(() => { btn.innerHTML = "➤"; }, 2000);
         });
     }
 
@@ -296,25 +258,13 @@
         categories.forEach(cat => {
             if(cat) {
                 const opt = document.createElement('option');
-                opt.value = cat; opt.textContent = cat;
-                select.appendChild(opt);
+                opt.value = cat; opt.textContent = cat; select.appendChild(opt);
             }
         });
     }
 
     window.filterData = function(cat) { renderCards(cat); }
-
-    function checkNotifications() {
-        const todayItems = allData.filter(item => getStatus(item.start, item.end).code === 'today');
-        if (todayItems.length > 0) {
-            document.getElementById('modalListContent').innerHTML = "<ul>" + todayItems.map(i => `<li style="margin-bottom:8px;">${i.name}</li>`).join('') + "</ul>";
-            document.getElementById('notificationModal').style.display = 'flex';
-        }
-    }
     window.closeModal = function() { document.getElementById('notificationModal').style.display = 'none'; }
-
-    if ('serviceWorker' in navigator) navigator.serviceWorker.register('./sw.js');
-
     fetchSheetData();
 </script>
 </body>
