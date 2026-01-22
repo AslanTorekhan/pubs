@@ -1,4 +1,4 @@
-const CACHE_NAME = 'plan-dep-2026-v11';
+const CACHE_NAME = 'plan-dep-2026-v12';
 const urlsToCache = [
   './',
   './index.html',
