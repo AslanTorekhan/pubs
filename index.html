@@ -96,12 +96,10 @@
     </div>
 
 <script>
-    // 1. ССЫЛКА НА ЛИСТ С ДАТАМИ (gid=0)
-    const PLAN_CSV_URL = 'https://docs.google.com/spreadsheets/d/e/2PACX-1vSSiUUHVFLpn5WE5zwI7UOCNNz4gjENAX4ahMtDO7f8e_qvUpwTqtaBN0nfUzOU5unXMWvzwU5zhSkB/pub?gid=0&single=true&output=csv';
+    // ВАША НОВАЯ ССЫЛКА (с 4-м столбцом)
+    const SHEET_CSV_URL = 'https://docs.google.com/spreadsheets/d/e/2PACX-1vSSiUUHVFLpn5WE5zwI7UOCNNz4gjENAX4ahMtDO7f8e_qvUpwTqtaBN0nfUzOU5unXMWvzwU5zhSkB/pub?output=csv';
     
-    // 2. ССЫЛКА НА ЛИСТ СО ССЫЛКАМИ (gid=947799784)
-    const LINKS_CSV_URL = 'https://docs.google.com/spreadsheets/d/e/2PACX-1vSSiUUHVFLpn5WE5zwI7UOCNNz4gjENAX4ahMtDO7f8e_qvUpwTqtaBN0nfUzOU5unXMWvzwU5zhSkB/pub?gid=947799784&single=true&output=csv'; 
-
+    // Ссылка по умолчанию
     const DEFAULT_URL = 'https://stat.gov.kz/ru/region/astana/spreadsheets/';
 
     let allData = [];
@@ -114,51 +112,25 @@
         location.reload(true);
     }
 
-    // "Очистка" строк для сравнения: убирает ё, лишние пробелы, приводит к нижнему регистру
-    function normalize(str) {
-        if (!str) return "";
-        return str.toLowerCase()
-                  .replace(/ё/g, 'е')
-                  .replace(/['"]/g, '') // убираем кавычки
-                  .replace(/\s+/g, ' ') // убираем двойные пробелы
-                  .trim();
-    }
-
-    function fetchAllData() {
-        Promise.all([
-            new Promise(resolve => Papa.parse(PLAN_CSV_URL, { download: true, skipEmptyLines: true, complete: resolve })),
-            new Promise(resolve => Papa.parse(LINKS_CSV_URL, { download: true, skipEmptyLines: true, complete: (res) => resolve(res), error: () => resolve({data:[]}) }))
-        ]).then(results => {
-            const planRows = results[0].data;
-            const linkRows = results[1].data;
-            
-            // Словари для хранения ссылок
-            const itemLinksMap = {};      // Ссылки для конкретных публикаций
-            const categoryLinksMap = {};  // Ссылки для целых отраслей
-
-            if (linkRows && linkRows.length > 0) {
-                linkRows.forEach(row => {
-                    // Структура файла ссылок: Col A (0) = Категория, Col B (1) = Название, Col C (2) = Ссылка
-                    let cat = normalize(row[0] || "");
-                    let name = normalize(row[1] || "");
-                    let url = row[2] ? row[2].trim() : '';
-
-                    if (url) {
-                        if (name) {
-                            itemLinksMap[name] = url; // Если есть имя, это ссылка на публикацию
-                        } else if (cat) {
-                            categoryLinksMap[cat] = url; // Если имени нет, но есть категория - это общая ссылка
-                        }
-                    }
-                });
+    function fetchSheetData() {
+        Papa.parse(SHEET_CSV_URL, {
+            download: true,
+            header: false,
+            skipEmptyLines: true,
+            complete: function(results) {
+                if (results.data && results.data.length > 0) {
+                    parseData(results.data);
+                } else {
+                    document.getElementById('loader').innerHTML = "Таблица пуста";
+                }
+            },
+            error: function(err) {
+                document.getElementById('loader').innerHTML = "Ошибка: " + err.message;
             }
-            processData(planRows, itemLinksMap, categoryLinksMap);
-        }).catch(err => {
-            document.getElementById('loader').innerHTML = "Ошибка загрузки: " + err.message;
         });
     }
 
-    function processData(rows, itemLinksMap, categoryLinksMap) {
+    function parseData(rows) {
         let currentCategory = "Общее"; 
         let lastItemName = ""; 
         allData = [];
@@ -166,46 +138,40 @@
         rows.forEach((row, index) => {
             if (index === 0) return; 
 
-            let rawName = row[0] ? row[0].trim() : '';
+            // Читаем: 0=Имя, 1=Начало, 2=Конец, 3=ССЫЛКА (Колонка D)
+            let name = row[0] ? row[0].trim() : '';
             let startRaw = row[1] ? row[1].trim() : '';
             let endRaw = row[2] ? row[2].trim() : '';
+            let linkRaw = row[3] ? row[3].trim() : ''; 
 
-            // Определяем категорию
-            if (rawName && !startRaw && !endRaw) {
-                currentCategory = rawName;
+            if (name && !startRaw && !endRaw) {
+                currentCategory = name;
                 lastItemName = "";
                 return;
             }
 
-            // Обработка переноса строк дат (когда имя пустое)
-            if (!rawName && (startRaw || endRaw) && lastItemName) {
-                rawName = lastItemName;
+            if (!name && (startRaw || endRaw) && lastItemName) {
+                name = lastItemName;
             }
 
-            if (!rawName) return;
-            lastItemName = rawName;
+            if (!name) return;
+            lastItemName = name;
+
+            // Если ссылка пустая, ставим стандартную
+            let finalUrl = linkRaw || DEFAULT_URL;
 
             const startDate = parseRusDate(startRaw);
             const endDate = parseRusDate(endRaw);
 
             if (endDate) {
-                // ЛОГИКА ПОИСКА ССЫЛКИ
-                const searchName = normalize(rawName);
-                const searchCat = normalize(currentCategory);
-
-                // 1. Ищем точное совпадение по имени публикации
-                // 2. Если нет, ищем ссылку для текущей категории
-                // 3. Если ничего нет, ставим общую ссылку
-                const specificUrl = itemLinksMap[searchName] || categoryLinksMap[searchCat] || DEFAULT_URL;
-
                 allData.push({
-                    name: rawName,
+                    name: name,
                     category: currentCategory,
                     start: startDate,
                     end: endDate,
                     startTxt: startRaw || "—",
                     endTxt: endRaw,
-                    url: specificUrl
+                    url: finalUrl
                 });
             }
         });
@@ -330,7 +296,7 @@
         }
     }
 
-    fetchAllData();
+    fetchSheetData();
 </script>
 </body>
 </html>
