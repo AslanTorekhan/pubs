@@ -24,247 +24,182 @@
             --done: #00b894;
         }
 
-        body { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif; background-color: var(--bg-color); margin: 0; padding-bottom: 80px; }
-        
-        header { background: var(--accent); color: white; padding: 15px 20px; position: sticky; top: 0; z-index: 100; box-shadow: 0 2px 10px rgba(0,0,0,0.1); }
-        .header-top { display: flex; justify-content: space-between; align-items: center; margin-bottom: 12px; }
-        h1 { margin: 0; font-size: 18px; font-weight: 600; }
-        .refresh-btn { background: none; border: none; color: white; font-size: 20px; cursor: pointer; padding: 5px; }
+        body { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif; background-color: var(--bg-color); margin: 0; padding-bottom: 80px; }
+        header { background: var(--accent); color: white; padding: 15px 20px; position: sticky; top: 0; z-index: 100; }
+        .header-top { display: flex; justify-content: space-between; align-items: center; margin-bottom: 10px; }
+        h1 { margin: 0; font-size: 18px; }
 
-        .filter-container { position: relative; width: 100%; }
-        .filter-select {
-            width: 100%; padding: 12px 15px; font-size: 15px; border: 1px solid rgba(255,255,255,0.3);
-            border-radius: 10px; background: rgba(255, 255, 255, 0.15); color: white; outline: none; cursor: pointer;
-        }
-        .filter-select option { background: white; color: var(--text-main); }
+        .filter-select { width: 100%; padding: 12px; border-radius: 10px; border: 1px solid rgba(255,255,255,0.3); background: rgba(255,255,255,0.2); color: white; font-size: 15px; }
+        .filter-select option { color: black; }
 
         .container { padding: 15px; max-width: 600px; margin: 0 auto; }
+        .card { background: var(--card-bg); border-radius: 12px; padding: 15px; margin-bottom: 15px; box-shadow: 0 2px 5px rgba(0,0,0,0.05); border-left: 5px solid var(--wait); }
         
-        .card { display: flex; flex-direction: column; background: var(--card-bg); border-radius: 12px; padding: 15px; margin-bottom: 15px; box-shadow: 0 2px 5px rgba(0,0,0,0.05); border-left: 5px solid var(--wait); }
+        .card-link { text-decoration: none; color: inherit; }
+        .card-cat { font-size: 10px; text-transform: uppercase; color: var(--text-sec); font-weight: 700; margin-bottom: 4px; }
+        .card-title { font-size: 15px; font-weight: 600; color: var(--accent); margin-bottom: 8px; line-height: 1.3; }
         
-        .card-link { text-decoration: none; color: inherit; display: block; }
-        .card-cat { font-size: 11px; text-transform: uppercase; color: var(--text-sec); letter-spacing: 0.5px; font-weight: 700; margin-bottom: 4px; }
-        .card-title { font-size: 15px; font-weight: 600; color: var(--accent); line-height: 1.4; margin-bottom: 8px; }
-        
-        .card-footer { display: flex; justify-content: space-between; align-items: center; padding-bottom: 12px; border-bottom: 1px solid #f1f2f6; }
-        .card-date { font-size: 13px; color: var(--text-sec); display: flex; align-items: center; gap: 5px; background: #f1f2f6; padding: 4px 8px; border-radius: 6px; }
-        .status-badge { padding: 4px 8px; border-radius: 6px; font-size: 11px; font-weight: 600; color: white; background: var(--wait); }
+        .card-footer { display: flex; justify-content: space-between; align-items: center; padding-bottom: 10px; border-bottom: 1px solid #f1f2f6; }
+        .card-date { font-size: 12px; color: var(--text-sec); background: #f1f2f6; padding: 4px 8px; border-radius: 6px; }
+        .status-badge { padding: 4px 8px; border-radius: 6px; font-size: 10px; font-weight: 700; color: white; }
 
-        /* БОКС ДЛЯ ОТОБРАЖЕНИЯ КОММЕНТАРИЕВ */
-        .comment-display {
-            margin-top: 10px;
-            background: #f8f9fa;
-            border-radius: 8px;
-            padding: 10px;
-            font-size: 13px;
-            color: #2d3436;
-            border-left: 3px solid #dfe6e9;
-            white-space: pre-line; /* Чтобы работали переносы строк */
-            display: none; /* Прячем, если пусто */
-        }
+        /* БОКС ЗАМЕТОК */
+        .comment-display { margin-top: 10px; background: #f9f9f9; border-radius: 8px; padding: 10px; font-size: 13px; border-left: 3px solid #dfe6e9; white-space: pre-line; display: none; }
         .comment-display.active { display: block; }
 
-        .comment-section { margin-top: 12px; display: flex; gap: 8px; align-items: center; }
-        .comment-input {
-            flex: 1; padding: 10px 14px; border: 1px solid #eee; border-radius: 20px; font-size: 14px; outline: none; background: #f9f9f9;
-        }
-        .comment-btn {
-            background: var(--accent); color: white; border: none; border-radius: 50%; width: 38px; height: 38px; cursor: pointer; display: flex; align-items: center; justify-content: center;
-        }
+        .comment-section { margin-top: 12px; display: flex; gap: 8px; }
+        .comment-input { flex: 1; padding: 10px 14px; border: 1px solid #eee; border-radius: 20px; font-size: 14px; outline: none; }
+        .comment-btn { background: var(--accent); color: white; border: none; border-radius: 50%; width: 36px; height: 36px; cursor: pointer; display: flex; align-items: center; justify-content: center; flex-shrink: 0; }
 
-        .card.status-wait { border-left-color: var(--wait); }
-        .card.status-work { border-left-color: var(--work); }
-        .card.status-today { border-left-color: var(--today); }
-        .card.status-done { border-left-color: var(--done); }
+        .status-wait { border-left-color: var(--wait); } .status-wait .status-badge { background: var(--wait); }
+        .status-work { border-left-color: var(--work); } .status-work .status-badge { background: var(--work); }
+        .status-today { border-left-color: var(--today); } .status-today .status-badge { background: var(--today); }
+        .status-done { border-left-color: var(--done); } .status-done .status-badge { background: var(--done); }
 
-        #loader { text-align: center; padding: 40px; color: var(--text-sec); }
-
-        .modal { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.6); z-index: 1000; justify-content: center; align-items: center; backdrop-filter: blur(3px); }
-        .modal-content { background: white; padding: 25px; border-radius: 20px; width: 85%; max-width: 320px; text-align: center; }
+        #loader { text-align: center; padding: 50px; color: var(--text-sec); }
     </style>
 </head>
 <body>
 
     <header>
         <div class="header-top">
-            <h1>План Департамента 2026</h1>
-            <button class="refresh-btn" onclick="hardReload()">↻</button>
+            <h1>План публикации 2026</h1>
+            <button style="background:none; border:none; color:white; font-size:20px;" onclick="location.reload()">↻</button>
         </div>
-        <div class="filter-container">
-            <select id="categorySelect" class="filter-select" onchange="filterData(this.value)">
-                <option value="all">📂 Все Отрасли</option>
-            </select>
-        </div>
+        <select id="categorySelect" class="filter-select" onchange="filterData(this.value)">
+            <option value="all">📂 Все направления</option>
+        </select>
     </header>
 
-    <div id="loader">Загрузка плана...</div>
+    <div id="loader">Загрузка данных...</div>
     <div class="container" id="app"></div>
-
-    <div id="notificationModal" class="modal">
-        <div class="modal-content">
-            <h2 style="color:#d63031;">🔥 Срок сегодня!</h2>
-            <div id="modalListContent"></div>
-            <button style="width:100%; padding:12px; margin-top:15px; border:none; border-radius:10px; background:var(--accent); color:white;" onclick="closeModal()">Принято</button>
-        </div>
-    </div>
 
 <script>
     const SHEET_CSV_URL = 'https://docs.google.com/spreadsheets/d/e/2PACX-1vSSiUUHVFLpn5WE5zwI7UOCNNz4gjENAX4ahMtDO7f8e_qvUpwTqtaBN0nfUzOU5unXMWvzwU5zhSkB/pub?output=csv';
     const APPS_SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbxpDK0afwiRK9pBXeqt0vCStRzdvucCUgcWsbAsabJpXwbAj0aN3jId5aTqX2fqhJjWhg/exec';
 
     let allData = [];
-    const currentYear = new Date().getFullYear();
-
-    function hardReload() {
-        if ('caches' in window) caches.keys().then(names => names.forEach(name => caches.delete(name)));
-        location.reload(true);
-    }
 
     function fetchSheetData() {
         Papa.parse(SHEET_CSV_URL, {
             download: true,
             header: false,
-            skipEmptyLines: true,
             complete: function(results) {
-                if (results.data && results.data.length > 0) parseData(results.data);
+                parseData(results.data);
             }
         });
     }
 
     function parseData(rows) {
-        let currentCategory = "Общее"; 
-        let lastItemName = ""; 
+        let currentCat = "Общее";
+        let lastTitle = "";
         allData = [];
 
-        rows.forEach((row, index) => {
-            if (index === 0) return; 
-            let name = row[0] ? row[0].trim() : '';
-            let startRaw = row[1] ? row[1].trim() : '';
-            let endRaw = row[2] ? row[2].trim() : '';
-            let linkRaw = row[3] ? row[3].trim() : ''; 
-            let commentRaw = row[4] ? row[4].trim() : ''; // Читаем 5-й столбец (E)
+        rows.forEach((row, i) => {
+            if (i === 0) return;
+            let name = row[0] ? row[0].trim() : "";
+            let start = row[1] ? row[1].trim() : "";
+            let end = row[2] ? row[2].trim() : "";
+            let link = row[3] ? row[3].trim() : "";
+            let comm = row[4] ? row[4].trim() : "";
 
-            if (name && !startRaw && !endRaw) {
-                currentCategory = name;
-                lastItemName = "";
-                return;
-            }
-            if (!name && (startRaw || endRaw) && lastItemName) name = lastItemName;
+            if (name && !start && !end) { currentCat = name; return; }
+            if (!name && (start || end)) name = lastTitle;
             if (!name) return;
-            lastItemName = name;
+            lastTitle = name;
 
-            const endDate = parseRusDate(endRaw);
-            if (endDate) {
-                allData.push({
-                    name: name,
-                    category: currentCategory,
-                    start: parseRusDate(startRaw),
-                    end: endDate,
-                    endTxt: endRaw,
-                    url: linkRaw || 'https://stat.gov.kz/',
-                    comment: commentRaw
-                });
-            }
+            allData.push({
+                name: name,
+                category: currentCat,
+                endTxt: end,
+                url: link || "https://stat.gov.kz/",
+                comment: comm,
+                // Для статуса используем упрощенную логику (можно вернуть вашу дату)
+                status: (end.includes("января") || end.includes("01")) ? "today" : "wait" 
+            });
         });
 
         document.getElementById('loader').style.display = 'none';
-        generateFilters();
         renderCards('all');
+        updateFilterList();
     }
 
-    function parseRusDate(str) {
-        if (!str) return null;
-        str = str.toLowerCase().replace(/\./g, ' ').trim();
-        const numericMatch = str.match(/^(\d{1,2})\s+(\d{1,2})/);
-        if (numericMatch) return new Date(currentYear, parseInt(numericMatch[2]) - 1, parseInt(numericMatch[1]));
-        const months = ["янв", "фев", "мар", "апр", "мая", "июн", "июл", "авг", "сен", "окт", "ноя", "дек"];
-        const parts = str.split(' ');
-        let mIdx = -1;
-        months.forEach((m, i) => { if (parts[1] && parts[1].includes(m)) mIdx = i; });
-        return mIdx !== -1 ? new Date(currentYear, mIdx, parseInt(parts[0])) : null;
-    }
-
-    function getStatus(start, end) {
-        const now = new Date(); now.setHours(0,0,0,0);
-        const dEnd = new Date(end); dEnd.setHours(0,0,0,0);
-        const dStart = start ? new Date(start) : dEnd; dStart.setHours(0,0,0,0);
-
-        if (now > dEnd) return { text: "ВЫПОЛНЕНО", class: "status-done" };
-        if (now.getTime() === dEnd.getTime()) return { text: "СРОК СЕГОДНЯ", class: "status-today" };
-        if (now >= dStart && now < dEnd) return { text: "В РАБОТЕ", class: "status-work" };
-        return { text: "ОЖИДАНИЕ", class: "status-wait" };
-    }
-
-    function renderCards(filterCat) {
+    function renderCards(filter) {
         const container = document.getElementById('app');
         container.innerHTML = "";
-        const filtered = filterCat === 'all' ? allData : allData.filter(d => d.category === filterCat);
+        const filtered = filter === 'all' ? allData : allData.filter(d => d.category === filter);
 
-        filtered.forEach(item => {
-            const status = getStatus(item.start, item.end);
+        filtered.forEach((item, index) => {
+            const cardId = "card-" + index;
             const div = document.createElement('div');
-            div.className = `card ${status.class}`;
+            div.className = `card status-${item.status}`;
             div.innerHTML = `
                 <a href="${item.url}" target="_blank" class="card-link">
                     <div class="card-cat">${item.category}</div>
-                    <div class="card-title">${item.name} 🔗</div>
+                    <div class="card-title">${item.name}</div>
                     <div class="card-footer">
                         <div class="card-date">📅 ${item.endTxt}</div>
-                        <div class="status-badge">${status.text}</div>
+                        <div class="status-badge">В ПЛАНЕ</div>
                     </div>
                 </a>
                 
-                <div id="display-${item.name}" class="comment-display ${item.comment ? 'active' : ''}">
-                    <b>Заметки:</b><br>${item.comment}
+                <div id="box-${cardId}" class="comment-display ${item.comment ? 'active' : ''}">
+                    <b>Заметки:</b><br><span id="text-${cardId}">${item.comment}</span>
                 </div>
 
                 <div class="comment-section">
-                    <input type="text" class="comment-input" id="com-${item.name}" placeholder="Написать комментарий...">
-                    <button class="comment-btn" onclick="sendComment('${item.name.replace(/'/g, "\\'")}')">➤</button>
+                    <input type="text" class="comment-input" id="input-${cardId}" placeholder="Ваш комментарий...">
+                    <button class="comment-btn" onclick="sendComment('${cardId}', '${item.name.replace(/'/g, "\\'")}')">➤</button>
                 </div>
             `;
             container.appendChild(div);
         });
     }
 
-    function sendComment(itemName) {
-        const input = document.getElementById(`com-${itemName}`);
-        const displayBox = document.getElementById(`display-${itemName}`);
+    function sendComment(cardId, itemName) {
+        const input = document.getElementById(`input-${cardId}`);
+        const displayBox = document.getElementById(`box-${cardId}`);
+        const textSpan = document.getElementById(`text-${cardId}`);
         const text = input.value.trim();
+
         if (!text) return;
 
         const btn = input.nextElementSibling;
         btn.innerHTML = "⏳";
+        btn.disabled = true;
 
-        // Мгновенное отображение на экране (не дожидаясь таблицы)
-        const oldContent = displayBox.classList.contains('active') ? displayBox.innerHTML.split('<br>')[1] : "";
-        displayBox.innerHTML = `<b>Заметки:</b><br>${oldContent ? oldContent + '\n' : ''}✍️ ${text}`;
+        // Мгновенно обновляем интерфейс
+        const currentText = textSpan.innerText;
+        textSpan.innerText = (currentText ? currentText + "\n" : "") + "✍️ " + text;
         displayBox.classList.add('active');
+        input.value = "";
 
+        // Отправка в таблицу
         fetch(APPS_SCRIPT_URL, {
             method: 'POST',
             mode: 'no-cors',
             body: JSON.stringify({ name: itemName, comment: text })
         }).then(() => {
-            input.value = "";
             btn.innerHTML = "✅";
-            setTimeout(() => { btn.innerHTML = "➤"; }, 2000);
+            setTimeout(() => { btn.innerHTML = "➤"; btn.disabled = false; }, 2000);
+        }).catch(() => {
+            alert("Ошибка отправки");
+            btn.innerHTML = "➤";
+            btn.disabled = false;
         });
     }
 
-    function generateFilters() {
-        const categories = [...new Set(allData.map(d => d.category))];
+    function updateFilterList() {
+        const cats = [...new Set(allData.map(d => d.category))];
         const select = document.getElementById('categorySelect');
-        categories.forEach(cat => {
-            if(cat) {
-                const opt = document.createElement('option');
-                opt.value = cat; opt.textContent = cat; select.appendChild(opt);
-            }
+        cats.forEach(c => {
+            const o = document.createElement('option');
+            o.value = c; o.innerText = c; select.appendChild(o);
         });
     }
 
-    window.filterData = function(cat) { renderCards(cat); }
-    window.closeModal = function() { document.getElementById('notificationModal').style.display = 'none'; }
+    function filterData(val) { renderCards(val); }
+
     fetchSheetData();
 </script>
 </body>
