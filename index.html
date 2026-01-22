@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>План Департамента 2026</title>
+    <title>План публикации 2026</title>
     
     <link rel="manifest" href="manifest.json">
     <meta name="theme-color" content="#0984e3">
@@ -18,7 +18,6 @@
             --text-main: #2d3436;
             --text-sec: #636e72;
             --accent: #0984e3;
-            /* Статусы */
             --wait: #b2bec3;
             --work: #fdcb6e;
             --today: #d63031;
@@ -26,35 +25,26 @@
         }
 
         body { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif; background-color: var(--bg-color); margin: 0; padding-bottom: 80px; }
-        
         header { background: var(--accent); color: white; padding: 15px 20px; position: sticky; top: 0; z-index: 100; box-shadow: 0 4px 10px rgba(0,0,0,0.1); }
         .header-top { display: flex; justify-content: space-between; align-items: center; margin-bottom: 12px; }
         h1 { margin: 0; font-size: 18px; font-weight: 600; }
         
-        /* Выпадающий список */
         .filter-select {
-            width: 100%; padding: 12px; border-radius: 10px; 
-            border: 1px solid rgba(255,255,255,0.3); 
-            background: rgba(255,255,255,0.2); 
-            color: white; font-size: 16px; outline: none;
-            backdrop-filter: blur(5px);
+            width: 100%; padding: 12px; border-radius: 10px; border: 1px solid rgba(255,255,255,0.3); 
+            background: rgba(255,255,255,0.2); color: white; font-size: 16px; outline: none; backdrop-filter: blur(5px);
         }
         .filter-select option { color: #333; background: white; }
 
         .container { padding: 15px; max-width: 600px; margin: 0 auto; }
-        
-        /* Карточка */
         .card { background: var(--card-bg); border-radius: 12px; padding: 15px; margin-bottom: 15px; box-shadow: 0 2px 5px rgba(0,0,0,0.05); border-left: 5px solid var(--wait); }
         
         .card-link { text-decoration: none; color: inherit; display: block; }
         .card-cat { font-size: 11px; text-transform: uppercase; color: var(--text-sec); font-weight: 700; margin-bottom: 5px; }
         .card-title { font-size: 15px; font-weight: 600; color: var(--accent); margin-bottom: 10px; line-height: 1.4; }
-        
         .card-footer { display: flex; justify-content: space-between; align-items: center; padding-bottom: 10px; border-bottom: 1px solid #f0f0f0; margin-bottom: 10px; }
         .card-date { font-size: 13px; color: #555; background: #f1f2f6; padding: 4px 8px; border-radius: 6px; }
         .status-badge { padding: 4px 8px; border-radius: 6px; font-size: 11px; font-weight: 700; color: white; text-transform: uppercase; }
 
-        /* Блок комментариев */
         .comment-display {
             background: #f8f9fa; border-radius: 8px; padding: 10px; 
             font-size: 13px; color: #333; border-left: 3px solid #dfe6e9; 
@@ -66,7 +56,6 @@
         .comment-input { flex: 1; padding: 10px; border: 1px solid #ddd; border-radius: 20px; font-size: 14px; outline: none; }
         .comment-btn { background: var(--accent); color: white; border: none; border-radius: 50%; width: 38px; height: 38px; cursor: pointer; display: flex; align-items: center; justify-content: center; }
 
-        /* Цвета статусов */
         .status-wait { border-left-color: var(--wait); } .status-wait .status-badge { background: var(--wait); }
         .status-work { border-left-color: var(--work); } .status-work .status-badge { background: var(--work); color: #333; }
         .status-today { border-left-color: var(--today); } .status-today .status-badge { background: var(--today); }
@@ -91,57 +80,44 @@
     <div class="container" id="app"></div>
 
 <script>
-    // === НАСТРОЙКИ ===
     const SHEET_CSV_URL = 'https://docs.google.com/spreadsheets/d/e/2PACX-1vSSiUUHVFLpn5WE5zwI7UOCNNz4gjENAX4ahMtDO7f8e_qvUpwTqtaBN0nfUzOU5unXMWvzwU5zhSkB/pub?output=csv';
     const APPS_SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbxpDK0afwiRK9pBXeqt0vCStRzdvucCUgcWsbAsabJpXwbAj0aN3jId5aTqX2fqhJjWhg/exec';
     
     let allData = [];
     const currentYear = new Date().getFullYear();
 
-    // Функция жесткой перезагрузки
     function hardReload() {
         if ('caches' in window) caches.keys().then(names => names.forEach(name => caches.delete(name)));
         location.reload(true);
     }
 
-    // 1. ЗАГРУЗКА ДАННЫХ
     function fetchSheetData() {
         Papa.parse(SHEET_CSV_URL, {
             download: true,
             header: false,
-            complete: function(results) {
-                parseData(results.data);
-            },
-            error: function() {
-                document.getElementById('loader').innerHTML = "Ошибка загрузки";
-            }
+            complete: function(results) { parseData(results.data); },
+            error: function() { document.getElementById('loader').innerHTML = "Ошибка загрузки"; }
         });
     }
 
-    // 2. ОБРАБОТКА ДАННЫХ
     function parseData(rows) {
         let currentCat = "Общее";
         let lastTitle = "";
         allData = [];
 
         rows.forEach((row, i) => {
-            if (i === 0) return; // Пропуск шапки
-            
-            // Читаем столбцы: A, B, C, D, E
+            if (i === 0) return;
             let name = row[0] ? row[0].trim() : "";
             let start = row[1] ? row[1].trim() : "";
             let end = row[2] ? row[2].trim() : "";
             let link = row[3] ? row[3].trim() : "";
             let comm = row[4] ? row[4].trim() : "";
 
-            // Определение категории
             if (name && !start && !end) { currentCat = name; return; }
-            // Если имя пустое, но есть даты (объединенные ячейки) - берем прошлое имя
             if (!name && (start || end)) name = lastTitle;
             if (!name) return;
             lastTitle = name;
 
-            // Парсим даты
             const dStart = parseRusDate(start);
             const dEnd = parseRusDate(end);
 
@@ -151,7 +127,7 @@
                     category: currentCat,
                     start: dStart,
                     end: dEnd,
-                    endTxt: end,
+                    endTxt: end, // Это важно для поиска в таблице (уникальность)
                     url: link || "https://stat.gov.kz/",
                     comment: comm
                 });
@@ -159,37 +135,26 @@
         });
 
         document.getElementById('loader').style.display = 'none';
-        updateFilterList(); // Заполняем бегунок
-        renderCards('all'); // Рисуем карточки
+        updateFilterList();
+        renderCards('all');
     }
 
-    // Парсинг русских дат (поддерживает "20 мая" и "20.05")
     function parseRusDate(str) {
         if (!str) return null;
         str = str.toLowerCase().replace(/\./g, ' ').trim();
-        
-        // Формат "20 05"
         const numericMatch = str.match(/^(\d{1,2})\s+(\d{1,2})/);
         if (numericMatch) return new Date(currentYear, parseInt(numericMatch[2]) - 1, parseInt(numericMatch[1]));
-        
-        // Формат "20 мая"
         const months = ["янв", "фев", "мар", "апр", "мая", "июн", "июл", "авг", "сен", "окт", "ноя", "дек"];
         const parts = str.split(' ');
         let mIdx = -1;
         months.forEach((m, i) => { if (parts[1] && parts[1].includes(m)) mIdx = i; });
-        
         return mIdx !== -1 ? new Date(currentYear, mIdx, parseInt(parts[0])) : null;
     }
 
-    // Определение статуса (Выполнено / Сегодня / В работе / Ожидание)
     function getStatus(start, end) {
-        const now = new Date(); 
-        now.setHours(0,0,0,0); // Обнуляем время для чистого сравнения дат
-        
+        const now = new Date(); now.setHours(0,0,0,0);
         const dEnd = new Date(end); dEnd.setHours(0,0,0,0);
-        // Если даты начала нет, считаем дату конца датой начала
-        const dStart = start ? new Date(start) : new Date(dEnd); 
-        dStart.setHours(0,0,0,0);
+        const dStart = start ? new Date(start) : new Date(dEnd); dStart.setHours(0,0,0,0);
 
         if (now > dEnd) return { text: "ВЫПОЛНЕНО", class: "done" };
         if (now.getTime() === dEnd.getTime()) return { text: "СРОК СЕГОДНЯ", class: "today" };
@@ -197,18 +162,16 @@
         return { text: "ОЖИДАНИЕ", class: "wait" };
     }
 
-    // 3. ОТРИСОВКА
     function renderCards(filter) {
         const container = document.getElementById('app');
         container.innerHTML = "";
-        
         const filtered = filter === 'all' ? allData : allData.filter(d => d.category === filter);
 
         if(filtered.length === 0) container.innerHTML = "<div style='text-align:center; color:#999'>Нет данных</div>";
 
         filtered.forEach((item, index) => {
             const status = getStatus(item.start, item.end);
-            const cardId = "c-" + index; // Уникальный ID для комментариев
+            const cardId = "c-" + index; 
             
             const div = document.createElement('div');
             div.className = `card status-${status.class}`;
@@ -228,15 +191,14 @@
 
                 <div class="comment-section">
                     <input type="text" class="comment-input" id="inp-${cardId}" placeholder="Написать комментарий...">
-                    <button class="comment-btn" onclick="sendComment('${cardId}', '${item.name.replace(/'/g, "\\'")}')">➤</button>
+                    <button class="comment-btn" onclick="sendComment('${cardId}', '${item.name.replace(/'/g, "\\'")}', '${item.endTxt}')">➤</button>
                 </div>
             `;
             container.appendChild(div);
         });
     }
 
-    // 4. ОТПРАВКА КОММЕНТАРИЯ
-    function sendComment(cardId, itemName) {
+    function sendComment(cardId, itemName, itemDate) {
         const input = document.getElementById(`inp-${cardId}`);
         const textBox = document.getElementById(`txt-${cardId}`);
         const boxDiv = document.getElementById(`box-${cardId}`);
@@ -248,51 +210,42 @@
         btn.innerHTML = "⏳";
         btn.disabled = true;
 
-        // Мгновенно показываем на экране (Визуальный обман, чтобы не ждать)
-        const currentContent = textBox.innerText;
-        // Получаем текущее время для красоты
         const now = new Date();
         const timeStr = now.getDate() + "." + (now.getMonth()+1) + " " + now.getHours() + ":" + (now.getMinutes()<10?'0':'') + now.getMinutes();
-        
         const newEntry = `[${timeStr}] ${text}`;
-        textBox.innerText = currentContent ? currentContent + "\n" + newEntry : newEntry;
+        
+        textBox.innerText = textBox.innerText ? textBox.innerText + "\n" + newEntry : newEntry;
         boxDiv.classList.add('active');
         input.value = "";
 
-        // Отправляем в Google Sheets
+        // Отправляем ИМЯ, ДАТУ и ТЕКСТ
         fetch(APPS_SCRIPT_URL, {
             method: 'POST',
             mode: 'no-cors',
             headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({ name: itemName, comment: text })
+            body: JSON.stringify({ name: itemName, date: itemDate, comment: text })
         }).then(() => {
             btn.innerHTML = "✅";
             setTimeout(() => { btn.innerHTML = "➤"; btn.disabled = false; }, 2000);
         }).catch(err => {
-            alert("Ошибка сети. Но визуально сохранено.");
+            alert("Ошибка сети.");
             btn.innerHTML = "➤";
             btn.disabled = false;
         });
     }
 
-    // Заполнение выпадающего списка
     function updateFilterList() {
         const cats = [...new Set(allData.map(d => d.category))];
         const select = document.getElementById('categorySelect');
-        // Очищаем всё кроме первого
         select.innerHTML = '<option value="all">📂 Все Отрасли</option>';
-        
         cats.forEach(c => {
             const opt = document.createElement('option');
-            opt.value = c; opt.innerText = c;
-            select.appendChild(opt);
+            opt.value = c; opt.innerText = c; select.appendChild(opt);
         });
     }
 
     window.filterData = function(val) { renderCards(val); }
-
     if ('serviceWorker' in navigator) navigator.serviceWorker.register('./sw.js');
-    
     fetchSheetData();
 </script>
 </body>
