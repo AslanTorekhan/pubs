@@ -26,27 +26,82 @@
 
         body { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif; background-color: var(--bg-color); margin: 0; padding-bottom: 80px; }
         
-        header { background: var(--accent); color: white; padding: 15px 20px; position: sticky; top: 0; z-index: 100; box-shadow: 0 2px 10px rgba(0,0,0,0.1); display: flex; justify-content: space-between; align-items: center; }
+        header { background: var(--accent); color: white; padding: 15px 20px; position: sticky; top: 0; z-index: 100; box-shadow: 0 2px 10px rgba(0,0,0,0.1); }
+        .header-top { display: flex; justify-content: space-between; align-items: center; margin-bottom: 10px; }
         h1 { margin: 0; font-size: 18px; font-weight: 600; }
         .refresh-btn { background: none; border: none; color: white; font-size: 20px; cursor: pointer; padding: 5px; }
 
-        .filters { overflow-x: auto; white-space: nowrap; padding: 15px; background: white; -webkit-overflow-scrolling: touch; scrollbar-width: none; border-bottom: 1px solid #eee; }
-        .filters::-webkit-scrollbar { display: none; }
-        .filter-btn { background: #dfe6e9; border: none; padding: 8px 16px; border-radius: 20px; margin-right: 10px; font-size: 14px; color: var(--text-main); cursor: pointer; transition: 0.2s; }
-        .filter-btn.active { background: var(--accent); color: white; }
+        /* НОВЫЙ ДИЗАЙН ФИЛЬТРА (БЕГУНОК/СПИСОК) */
+        .filter-container { position: relative; width: 100%; }
+        .filter-select {
+            width: 100%;
+            padding: 10px 15px;
+            font-size: 16px;
+            border: none;
+            border-radius: 8px;
+            background: rgba(255, 255, 255, 0.2); /* Полупрозрачный белый */
+            color: white;
+            appearance: none; /* Убираем стандартную стрелку */
+            outline: none;
+            cursor: pointer;
+            font-weight: 500;
+        }
+        .filter-select option {
+            background: white;
+            color: var(--text-main);
+        }
+        /* Стрелочка для списка */
+        .filter-arrow {
+            position: absolute;
+            right: 15px;
+            top: 50%;
+            transform: translateY(-50%);
+            pointer-events: none;
+            color: white;
+            font-size: 12px;
+        }
 
         .container { padding: 15px; max-width: 600px; margin: 0 auto; }
         
-        /* Карточка-ссылка */
-        .card { text-decoration: none; display: flex; flex-direction: column; background: var(--card-bg); border-radius: 12px; padding: 15px; margin-bottom: 15px; box-shadow: 0 2px 5px rgba(0,0,0,0.05); gap: 8px; border-left: 5px solid var(--wait); transition: transform 0.1s; cursor: pointer; -webkit-tap-highlight-color: transparent; }
-        .card:active { transform: scale(0.98); background: #fafafa; }
+        /* КАРТОЧКА */
+        .card { display: flex; flex-direction: column; background: var(--card-bg); border-radius: 12px; padding: 15px; margin-bottom: 15px; box-shadow: 0 2px 5px rgba(0,0,0,0.05); gap: 8px; border-left: 5px solid var(--wait); transition: transform 0.1s; }
         
+        /* Ссылка названия */
+        .card-link { text-decoration: none; color: inherit; display: block; }
+        .card-link:active { opacity: 0.7; }
+
         .card-cat { font-size: 11px; text-transform: uppercase; color: var(--text-sec); letter-spacing: 0.5px; font-weight: 700; margin-bottom: 4px; }
         .card-title { font-size: 15px; font-weight: 600; color: var(--accent); line-height: 1.4; text-decoration: underline; text-decoration-color: transparent; transition: 0.2s; }
         
-        .card-footer { display: flex; justify-content: space-between; align-items: center; margin-top: 8px; }
+        .card-footer { display: flex; justify-content: space-between; align-items: center; margin-top: 8px; padding-bottom: 10px; border-bottom: 1px solid #eee; }
         .card-date { font-size: 13px; color: var(--text-sec); display: flex; align-items: center; gap: 5px; background: #f1f2f6; padding: 4px 8px; border-radius: 6px; }
         .status-badge { padding: 4px 8px; border-radius: 6px; font-size: 11px; font-weight: 600; color: white; background: var(--wait); }
+
+        /* БЛОК КОММЕНТАРИЕВ */
+        .comment-section { margin-top: 10px; display: flex; gap: 8px; }
+        .comment-input {
+            flex: 1;
+            padding: 8px 12px;
+            border: 1px solid #dfe6e9;
+            border-radius: 20px;
+            font-size: 14px;
+            outline: none;
+            transition: 0.2s;
+        }
+        .comment-input:focus { border-color: var(--accent); }
+        .comment-btn {
+            background: var(--accent);
+            color: white;
+            border: none;
+            border-radius: 50%;
+            width: 36px;
+            height: 36px;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 14px;
+        }
 
         .card.status-wait { border-left-color: var(--wait); }
         .card.status-work { border-left-color: var(--work); }
@@ -62,7 +117,6 @@
 
         .modal { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.5); z-index: 1000; justify-content: center; align-items: center; }
         .modal-content { background: white; padding: 25px; border-radius: 15px; width: 85%; max-width: 320px; text-align: center; box-shadow: 0 10px 25px rgba(0,0,0,0.2); }
-        .modal h2 { margin-top: 0; color: var(--today); font-size: 20px; }
         .modal-btn { background: var(--accent); color: white; border: none; padding: 12px 0; border-radius: 8px; margin-top: 20px; cursor: pointer; width: 100%; font-size: 16px; font-weight: 500; }
 
         #installContainer { display: none; position: fixed; bottom: 25px; left: 50%; transform: translateX(-50%); z-index: 999; }
@@ -72,18 +126,25 @@
 <body>
 
     <header>
-        <h1>План Департамента 2026</h1>
-        <button class="refresh-btn" onclick="hardReload()">↻</button>
+        <div class="header-top">
+            <h1>План Департамента 2026</h1>
+            <button class="refresh-btn" onclick="hardReload()">↻</button>
+        </div>
+        
+        <div class="filter-container">
+            <select id="categorySelect" class="filter-select" onchange="filterData(this.value)">
+                <option value="all">📂 Все Отрасли</option>
+                </select>
+            <div class="filter-arrow">▼</div>
+        </div>
     </header>
-
-    <div class="filters" id="filters"></div>
 
     <div id="loader">Загрузка данных...</div>
     <div class="container" id="app"></div>
 
     <div id="notificationModal" class="modal">
         <div class="modal-content">
-            <h2>🔥 Сегодня срок!</h2>
+            <h2 style="margin-top:0; color:#d63031;">🔥 Сегодня срок!</h2>
             <div id="modalListContent" style="text-align: left; font-size: 14px; color: #444; line-height: 1.5;"></div>
             <button class="modal-btn" onclick="closeModal()">Понятно</button>
         </div>
@@ -96,11 +157,14 @@
     </div>
 
 <script>
-    // ВАША НОВАЯ ССЫЛКА (с 4-м столбцом)
+    // 1. ВАШИ ССЫЛКИ
     const SHEET_CSV_URL = 'https://docs.google.com/spreadsheets/d/e/2PACX-1vSSiUUHVFLpn5WE5zwI7UOCNNz4gjENAX4ahMtDO7f8e_qvUpwTqtaBN0nfUzOU5unXMWvzwU5zhSkB/pub?output=csv';
-    
-    // Ссылка по умолчанию
     const DEFAULT_URL = 'https://stat.gov.kz/ru/region/astana/spreadsheets/';
+
+    // 2. ССЫЛКА НА СКРИПТ (ЧТОБЫ РАБОТАЛИ КОММЕНТАРИИ)
+    // Вам нужно создать Google Apps Script и вставить сюда полученную ссылку.
+    // Пока оставьте пустой, комментарии будут просто показывать уведомление.
+    const APPS_SCRIPT_URL = ''; 
 
     let allData = [];
     const currentYear = new Date().getFullYear();
@@ -138,7 +202,7 @@
         rows.forEach((row, index) => {
             if (index === 0) return; 
 
-            // Читаем: 0=Имя, 1=Начало, 2=Конец, 3=ССЫЛКА (Колонка D)
+            // Структура: A=Имя, B=Начало, C=Конец, D=ССЫЛКА
             let name = row[0] ? row[0].trim() : '';
             let startRaw = row[1] ? row[1].trim() : '';
             let endRaw = row[2] ? row[2].trim() : '';
@@ -157,7 +221,6 @@
             if (!name) return;
             lastItemName = name;
 
-            // Если ссылка пустая, ставим стандартную
             let finalUrl = linkRaw || DEFAULT_URL;
 
             const startDate = parseRusDate(startRaw);
@@ -177,7 +240,7 @@
         });
 
         document.getElementById('loader').style.display = 'none';
-        generateFilters();
+        generateFilters(); // Теперь наполняет выпадающий список
         renderCards('all');
         setTimeout(checkNotifications, 1500); 
     }
@@ -231,38 +294,80 @@
         filtered.forEach(item => {
             const status = getStatus(item.start, item.end);
             
-            const a = document.createElement('a');
-            a.className = `card ${status.class}`;
-            a.href = item.url;
-            a.target = "_blank"; 
+            const div = document.createElement('div');
+            div.className = `card ${status.class}`;
             
-            a.innerHTML = `
-                <div class="card-cat">${item.category}</div>
-                <div class="card-title">${item.name} 🔗</div>
-                <div class="card-footer">
-                    <div class="card-date">
-                        <span>📅 ${item.endTxt}</span>
+            // Ссылка теперь только на названии, чтобы не мешать вводу комментария
+            div.innerHTML = `
+                <a href="${item.url}" target="_blank" class="card-link">
+                    <div class="card-cat">${item.category}</div>
+                    <div class="card-title">${item.name} 🔗</div>
+                    <div class="card-footer">
+                        <div class="card-date"><span>📅 ${item.endTxt}</span></div>
+                        <div class="status-badge">${status.text}</div>
                     </div>
-                    <div class="status-badge">${status.text}</div>
+                </a>
+                
+                <div class="comment-section">
+                    <input type="text" class="comment-input" id="com-${item.name}" placeholder="Комментарий...">
+                    <button class="comment-btn" onclick="sendComment('${item.name}')">➤</button>
                 </div>
             `;
-            container.appendChild(a);
+            container.appendChild(div);
         });
     }
 
+    // ЛОГИКА ОТПРАВКИ КОММЕНТАРИЯ
+    function sendComment(itemName) {
+        const input = document.getElementById(`com-${itemName}`);
+        const text = input.value;
+        
+        if (!text) return;
+
+        if (!APPS_SCRIPT_URL) {
+            alert("⚠️ Чтобы комментарии сохранялись в Гугл Таблицу, нужно подключить Google Apps Script. \n\nПока что это работает только визуально.");
+            input.value = ""; // Очистить поле типа "отправили"
+            return;
+        }
+
+        // Если скрипт подключен, отправляем данные
+        const btn = input.nextElementSibling;
+        btn.innerHTML = "⏳";
+        
+        fetch(APPS_SCRIPT_URL, {
+            method: 'POST',
+            mode: 'no-cors', // Важно для Гугл Скриптов
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ name: itemName, comment: text })
+        }).then(() => {
+            alert("✅ Комментарий отправлен!");
+            input.value = "";
+            btn.innerHTML = "➤";
+        }).catch(err => {
+            alert("Ошибка отправки: " + err);
+            btn.innerHTML = "➤";
+        });
+    }
+
+    // ЗАПОЛНЕНИЕ ВЫПАДАЮЩЕГО СПИСКА
     function generateFilters() {
         const categories = [...new Set(allData.map(d => d.category))];
-        const filterContainer = document.getElementById('filters');
-        let html = `<button class="filter-btn active" onclick="filterData('all')">Все</button>`;
+        const select = document.getElementById('categorySelect');
+        
+        // Очищаем список (кроме первой опции "Все")
+        select.innerHTML = '<option value="all">📂 Все Отрасли</option>';
+
         categories.forEach(cat => {
-            if(cat) html += `<button class="filter-btn" onclick="filterData('${cat}')">${cat}</button>`;
+            if(cat) {
+                const option = document.createElement('option');
+                option.value = cat;
+                option.textContent = cat;
+                select.appendChild(option);
+            }
         });
-        filterContainer.innerHTML = html;
     }
 
     window.filterData = function(cat) {
-        document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
-        event.target.classList.add('active');
         renderCards(cat);
     }
 
