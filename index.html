@@ -27,80 +27,63 @@
         body { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif; background-color: var(--bg-color); margin: 0; padding-bottom: 80px; }
         
         header { background: var(--accent); color: white; padding: 15px 20px; position: sticky; top: 0; z-index: 100; box-shadow: 0 2px 10px rgba(0,0,0,0.1); }
-        .header-top { display: flex; justify-content: space-between; align-items: center; margin-bottom: 10px; }
+        .header-top { display: flex; justify-content: space-between; align-items: center; margin-bottom: 12px; }
         h1 { margin: 0; font-size: 18px; font-weight: 600; }
         .refresh-btn { background: none; border: none; color: white; font-size: 20px; cursor: pointer; padding: 5px; }
 
-        /* НОВЫЙ ДИЗАЙН ФИЛЬТРА (БЕГУНОК/СПИСОК) */
         .filter-container { position: relative; width: 100%; }
+        .filter-label { font-size: 12px; color: rgba(255,255,255,0.8); margin-bottom: 4px; display: block; font-weight: 500; }
         .filter-select {
             width: 100%;
-            padding: 10px 15px;
-            font-size: 16px;
-            border: none;
-            border-radius: 8px;
-            background: rgba(255, 255, 255, 0.2); /* Полупрозрачный белый */
+            padding: 12px 15px;
+            font-size: 15px;
+            border: 1px solid rgba(255,255,255,0.3);
+            border-radius: 10px;
+            background: rgba(255, 255, 255, 0.15);
             color: white;
-            appearance: none; /* Убираем стандартную стрелку */
+            appearance: none;
             outline: none;
             cursor: pointer;
-            font-weight: 500;
+            backdrop-filter: blur(5px);
         }
-        .filter-select option {
-            background: white;
-            color: var(--text-main);
-        }
-        /* Стрелочка для списка */
-        .filter-arrow {
-            position: absolute;
-            right: 15px;
-            top: 50%;
-            transform: translateY(-50%);
-            pointer-events: none;
-            color: white;
-            font-size: 12px;
-        }
+        .filter-select option { background: white; color: var(--text-main); }
+        .filter-arrow { position: absolute; right: 15px; bottom: 12px; pointer-events: none; color: white; font-size: 12px; }
 
         .container { padding: 15px; max-width: 600px; margin: 0 auto; }
         
-        /* КАРТОЧКА */
-        .card { display: flex; flex-direction: column; background: var(--card-bg); border-radius: 12px; padding: 15px; margin-bottom: 15px; box-shadow: 0 2px 5px rgba(0,0,0,0.05); gap: 8px; border-left: 5px solid var(--wait); transition: transform 0.1s; }
+        .card { display: flex; flex-direction: column; background: var(--card-bg); border-radius: 12px; padding: 15px; margin-bottom: 15px; box-shadow: 0 2px 5px rgba(0,0,0,0.05); border-left: 5px solid var(--wait); }
         
-        /* Ссылка названия */
         .card-link { text-decoration: none; color: inherit; display: block; }
-        .card-link:active { opacity: 0.7; }
-
         .card-cat { font-size: 11px; text-transform: uppercase; color: var(--text-sec); letter-spacing: 0.5px; font-weight: 700; margin-bottom: 4px; }
-        .card-title { font-size: 15px; font-weight: 600; color: var(--accent); line-height: 1.4; text-decoration: underline; text-decoration-color: transparent; transition: 0.2s; }
+        .card-title { font-size: 15px; font-weight: 600; color: var(--accent); line-height: 1.4; margin-bottom: 8px; }
         
-        .card-footer { display: flex; justify-content: space-between; align-items: center; margin-top: 8px; padding-bottom: 10px; border-bottom: 1px solid #eee; }
+        .card-footer { display: flex; justify-content: space-between; align-items: center; padding-bottom: 12px; border-bottom: 1px solid #f1f2f6; }
         .card-date { font-size: 13px; color: var(--text-sec); display: flex; align-items: center; gap: 5px; background: #f1f2f6; padding: 4px 8px; border-radius: 6px; }
         .status-badge { padding: 4px 8px; border-radius: 6px; font-size: 11px; font-weight: 600; color: white; background: var(--wait); }
 
-        /* БЛОК КОММЕНТАРИЕВ */
-        .comment-section { margin-top: 10px; display: flex; gap: 8px; }
+        .comment-section { margin-top: 12px; display: flex; gap: 8px; align-items: center; }
         .comment-input {
             flex: 1;
-            padding: 8px 12px;
-            border: 1px solid #dfe6e9;
+            padding: 10px 14px;
+            border: 1px solid #eee;
             border-radius: 20px;
             font-size: 14px;
             outline: none;
-            transition: 0.2s;
+            background: #f9f9f9;
         }
-        .comment-input:focus { border-color: var(--accent); }
+        .comment-input:focus { background: white; border-color: var(--accent); }
         .comment-btn {
             background: var(--accent);
             color: white;
             border: none;
             border-radius: 50%;
-            width: 36px;
-            height: 36px;
+            width: 38px;
+            height: 38px;
             cursor: pointer;
             display: flex;
             align-items: center;
             justify-content: center;
-            font-size: 14px;
+            box-shadow: 0 2px 5px rgba(9, 132, 227, 0.3);
         }
 
         .card.status-wait { border-left-color: var(--wait); }
@@ -108,19 +91,15 @@
         .card.status-today { border-left-color: var(--today); }
         .card.status-done { border-left-color: var(--done); }
 
-        .status-wait .status-badge { background: var(--wait); }
-        .status-work .status-badge { background: var(--work); color: #2d3436; }
-        .status-today .status-badge { background: var(--today); }
-        .status-done .status-badge { background: var(--done); }
+        #loader { text-align: center; padding: 40px; color: var(--text-sec); }
 
-        #loader { text-align: center; padding: 40px; color: var(--text-sec); font-size: 14px; }
-
-        .modal { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.5); z-index: 1000; justify-content: center; align-items: center; }
-        .modal-content { background: white; padding: 25px; border-radius: 15px; width: 85%; max-width: 320px; text-align: center; box-shadow: 0 10px 25px rgba(0,0,0,0.2); }
-        .modal-btn { background: var(--accent); color: white; border: none; padding: 12px 0; border-radius: 8px; margin-top: 20px; cursor: pointer; width: 100%; font-size: 16px; font-weight: 500; }
+        /* Модалка уведомлений */
+        .modal { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.6); z-index: 1000; justify-content: center; align-items: center; backdrop-filter: blur(3px); }
+        .modal-content { background: white; padding: 25px; border-radius: 20px; width: 85%; max-width: 320px; text-align: center; }
+        .modal-btn { background: var(--accent); color: white; border: none; padding: 12px 0; border-radius: 12px; margin-top: 20px; cursor: pointer; width: 100%; font-size: 16px; font-weight: 600; }
 
         #installContainer { display: none; position: fixed; bottom: 25px; left: 50%; transform: translateX(-50%); z-index: 999; }
-        .install-btn { background: var(--text-main); color: white; border: none; padding: 12px 24px; border-radius: 30px; font-weight: 600; box-shadow: 0 4px 15px rgba(0,0,0,0.3); cursor: pointer; display: flex; align-items: center; gap: 8px; }
+        .install-btn { background: #2d3436; color: white; border: none; padding: 12px 24px; border-radius: 30px; font-weight: 600; cursor: pointer; display: flex; align-items: center; gap: 8px; }
     </style>
 </head>
 <body>
@@ -132,39 +111,36 @@
         </div>
         
         <div class="filter-container">
+            <label class="filter-label">Отрасли:</label>
             <select id="categorySelect" class="filter-select" onchange="filterData(this.value)">
-                <option value="all">📂 Все Отрасли</option>
-                </select>
+                <option value="all">Все направления</option>
+            </select>
             <div class="filter-arrow">▼</div>
         </div>
     </header>
 
-    <div id="loader">Загрузка данных...</div>
+    <div id="loader">Загрузка плана...</div>
     <div class="container" id="app"></div>
 
     <div id="notificationModal" class="modal">
         <div class="modal-content">
-            <h2 style="margin-top:0; color:#d63031;">🔥 Сегодня срок!</h2>
-            <div id="modalListContent" style="text-align: left; font-size: 14px; color: #444; line-height: 1.5;"></div>
-            <button class="modal-btn" onclick="closeModal()">Понятно</button>
+            <h2 style="margin:0 0 15px 0; color:#d63031; font-size: 20px;">🔥 Срок сегодня!</h2>
+            <div id="modalListContent" style="text-align: left; font-size: 14px; color: #444;"></div>
+            <button class="modal-btn" onclick="closeModal()">Принято</button>
         </div>
     </div>
 
     <div id="installContainer">
-        <button class="install-btn" onclick="installPWA()">
-            <span>📲</span> Установить приложение
-        </button>
+        <button class="install-btn" onclick="installPWA()">📲 Установить</button>
     </div>
 
 <script>
-    // 1. ВАШИ ССЫЛКИ
+    // 1. ССЫЛКИ
     const SHEET_CSV_URL = 'https://docs.google.com/spreadsheets/d/e/2PACX-1vSSiUUHVFLpn5WE5zwI7UOCNNz4gjENAX4ahMtDO7f8e_qvUpwTqtaBN0nfUzOU5unXMWvzwU5zhSkB/pub?output=csv';
     const DEFAULT_URL = 'https://stat.gov.kz/ru/region/astana/spreadsheets/';
-
-    // 2. ССЫЛКА НА СКРИПТ (ЧТОБЫ РАБОТАЛИ КОММЕНТАРИИ)
-    // Вам нужно создать Google Apps Script и вставить сюда полученную ссылку.
-    // Пока оставьте пустой, комментарии будут просто показывать уведомление.
-    const APPS_SCRIPT_URL = ''; 
+    
+    // ВАША ССЫЛКА НА СКРИПТ (УЖЕ ВСТАВЛЕНА)
+    const APPS_SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbxpDK0afwiRK9pBXeqt0vCStRzdvucCUgcWsbAsabJpXwbAj0aN3jId5aTqX2fqhJjWhg/exec';
 
     let allData = [];
     const currentYear = new Date().getFullYear();
@@ -184,12 +160,7 @@
             complete: function(results) {
                 if (results.data && results.data.length > 0) {
                     parseData(results.data);
-                } else {
-                    document.getElementById('loader').innerHTML = "Таблица пуста";
                 }
-            },
-            error: function(err) {
-                document.getElementById('loader').innerHTML = "Ошибка: " + err.message;
             }
         });
     }
@@ -201,8 +172,6 @@
 
         rows.forEach((row, index) => {
             if (index === 0) return; 
-
-            // Структура: A=Имя, B=Начало, C=Конец, D=ССЫЛКА
             let name = row[0] ? row[0].trim() : '';
             let startRaw = row[1] ? row[1].trim() : '';
             let endRaw = row[2] ? row[2].trim() : '';
@@ -213,193 +182,138 @@
                 lastItemName = "";
                 return;
             }
-
-            if (!name && (startRaw || endRaw) && lastItemName) {
-                name = lastItemName;
-            }
-
+            if (!name && (startRaw || endRaw) && lastItemName) name = lastItemName;
             if (!name) return;
             lastItemName = name;
 
-            let finalUrl = linkRaw || DEFAULT_URL;
-
-            const startDate = parseRusDate(startRaw);
             const endDate = parseRusDate(endRaw);
-
             if (endDate) {
                 allData.push({
                     name: name,
                     category: currentCategory,
-                    start: startDate,
+                    start: parseRusDate(startRaw),
                     end: endDate,
-                    startTxt: startRaw || "—",
                     endTxt: endRaw,
-                    url: finalUrl
+                    url: linkRaw || DEFAULT_URL
                 });
             }
         });
 
         document.getElementById('loader').style.display = 'none';
-        generateFilters(); // Теперь наполняет выпадающий список
+        generateFilters();
         renderCards('all');
-        setTimeout(checkNotifications, 1500); 
+        setTimeout(checkNotifications, 1000); 
     }
 
     function parseRusDate(str) {
         if (!str) return null;
-        str = str.toLowerCase().replace(/\./g, ' ').replace(/,/g, ' ').replace(/\s+/g, ' ').trim();
-        const numericMatch = str.match(/^(\d{1,2})\s+(\d{1,2})(?:\s+(\d{4}))?/);
+        str = str.toLowerCase().replace(/\./g, ' ').replace(/\s+/g, ' ').trim();
+        const numericMatch = str.match(/^(\d{1,2})\s+(\d{1,2})/);
         if (numericMatch) {
-            const d = parseInt(numericMatch[1]);
-            const m = parseInt(numericMatch[2]) - 1;
-            const y = numericMatch[3] ? parseInt(numericMatch[3]) : currentYear;
-            return new Date(y, m, d);
+            return new Date(currentYear, parseInt(numericMatch[2]) - 1, parseInt(numericMatch[1]));
         }
+        const months = ["янв", "фев", "мар", "апр", "мая", "июн", "июл", "авг", "сен", "окт", "ноя", "дек"];
         const parts = str.split(' ');
-        if (parts.length < 2) return null;
-        const day = parseInt(parts[0]);
-        if (isNaN(day)) return null;
-        const monthNames = ["янв", "фев", "мар", "апр", "мая", "июн", "июл", "авг", "сен", "окт", "ноя", "дек"];
-        let monthIndex = -1;
-        monthNames.forEach((m, i) => { if (parts[1].includes(m)) monthIndex = i; });
-        if (monthIndex === -1) return null;
-        return new Date(currentYear, monthIndex, day);
+        let mIdx = -1;
+        months.forEach((m, i) => { if (parts[1] && parts[1].includes(m)) mIdx = i; });
+        return mIdx !== -1 ? new Date(currentYear, mIdx, parseInt(parts[0])) : null;
     }
 
     function getStatus(start, end) {
-        const now = new Date();
-        now.setHours(0,0,0,0);
-        const endTime = new Date(end);
-        endTime.setHours(0,0,0,0); 
-        const startTime = start ? new Date(start) : new Date(endTime);
-        startTime.setHours(0,0,0,0);
+        const now = new Date(); now.setHours(0,0,0,0);
+        const dEnd = new Date(end); dEnd.setHours(0,0,0,0);
+        const dStart = start ? new Date(start) : dEnd; dStart.setHours(0,0,0,0);
 
-        if (now > endTime) return { text: "ВЫПОЛНЕНО", class: "status-done", code: "done" };
-        if (now.getTime() === endTime.getTime()) return { text: "СРОК СЕГОДНЯ", class: "status-today", code: "today" };
-        if (now >= startTime && now < endTime) return { text: "В РАБОТЕ", class: "status-work", code: "work" };
+        if (now > dEnd) return { text: "ВЫПОЛНЕНО", class: "status-done", code: "done" };
+        if (now.getTime() === dEnd.getTime()) return { text: "СРОК СЕГОДНЯ", class: "status-today", code: "today" };
+        if (now >= dStart && now < dEnd) return { text: "В РАБОТЕ", class: "status-work", code: "work" };
         return { text: "ОЖИДАНИЕ", class: "status-wait", code: "wait" };
     }
 
     function renderCards(filterCat) {
         const container = document.getElementById('app');
         container.innerHTML = "";
-        
         const filtered = filterCat === 'all' ? allData : allData.filter(d => d.category === filterCat);
-
-        if (filtered.length === 0) {
-            container.innerHTML = "<div style='text-align:center; color:#999; margin-top:20px;'>Нет данных</div>";
-            return;
-        }
 
         filtered.forEach(item => {
             const status = getStatus(item.start, item.end);
-            
             const div = document.createElement('div');
             div.className = `card ${status.class}`;
-            
-            // Ссылка теперь только на названии, чтобы не мешать вводу комментария
             div.innerHTML = `
                 <a href="${item.url}" target="_blank" class="card-link">
                     <div class="card-cat">${item.category}</div>
                     <div class="card-title">${item.name} 🔗</div>
                     <div class="card-footer">
-                        <div class="card-date"><span>📅 ${item.endTxt}</span></div>
+                        <div class="card-date">📅 ${item.endTxt}</div>
                         <div class="status-badge">${status.text}</div>
                     </div>
                 </a>
-                
                 <div class="comment-section">
-                    <input type="text" class="comment-input" id="com-${item.name}" placeholder="Комментарий...">
-                    <button class="comment-btn" onclick="sendComment('${item.name}')">➤</button>
+                    <input type="text" class="comment-input" id="com-${item.name}" placeholder="Ваш комментарий...">
+                    <button class="comment-btn" onclick="sendComment('${item.name.replace(/'/g, "\\'")}')">➤</button>
                 </div>
             `;
             container.appendChild(div);
         });
     }
 
-    // ЛОГИКА ОТПРАВКИ КОММЕНТАРИЯ
     function sendComment(itemName) {
         const input = document.getElementById(`com-${itemName}`);
-        const text = input.value;
-        
+        const text = input.value.trim();
         if (!text) return;
 
-        if (!APPS_SCRIPT_URL) {
-            alert("⚠️ Чтобы комментарии сохранялись в Гугл Таблицу, нужно подключить Google Apps Script. \n\nПока что это работает только визуально.");
-            input.value = ""; // Очистить поле типа "отправили"
-            return;
-        }
-
-        // Если скрипт подключен, отправляем данные
         const btn = input.nextElementSibling;
+        const originalIcon = btn.innerHTML;
         btn.innerHTML = "⏳";
-        
+        btn.disabled = true;
+
+        // Отправка в Google Sheets
         fetch(APPS_SCRIPT_URL, {
             method: 'POST',
-            mode: 'no-cors', // Важно для Гугл Скриптов
+            mode: 'no-cors',
+            cache: 'no-cache',
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify({ name: itemName, comment: text })
         }).then(() => {
-            alert("✅ Комментарий отправлен!");
             input.value = "";
-            btn.innerHTML = "➤";
+            input.placeholder = "Отправлено!";
+            btn.innerHTML = "✅";
+            setTimeout(() => { 
+                btn.innerHTML = originalIcon; 
+                btn.disabled = false;
+                input.placeholder = "Ваш комментарий...";
+            }, 2000);
         }).catch(err => {
-            alert("Ошибка отправки: " + err);
-            btn.innerHTML = "➤";
+            alert("Ошибка сети");
+            btn.innerHTML = originalIcon;
+            btn.disabled = false;
         });
     }
 
-    // ЗАПОЛНЕНИЕ ВЫПАДАЮЩЕГО СПИСКА
     function generateFilters() {
         const categories = [...new Set(allData.map(d => d.category))];
         const select = document.getElementById('categorySelect');
-        
-        // Очищаем список (кроме первой опции "Все")
-        select.innerHTML = '<option value="all">📂 Все Отрасли</option>';
-
         categories.forEach(cat => {
             if(cat) {
-                const option = document.createElement('option');
-                option.value = cat;
-                option.textContent = cat;
-                select.appendChild(option);
+                const opt = document.createElement('option');
+                opt.value = cat; opt.textContent = cat;
+                select.appendChild(opt);
             }
         });
     }
 
-    window.filterData = function(cat) {
-        renderCards(cat);
-    }
+    window.filterData = function(cat) { renderCards(cat); }
 
     function checkNotifications() {
         const todayItems = allData.filter(item => getStatus(item.start, item.end).code === 'today');
         if (todayItems.length > 0) {
-            const list = document.getElementById('modalListContent');
-            list.innerHTML = "<ul>" + todayItems.map(i => `<li style="margin-bottom:5px;">${i.name}</li>`).join('') + "</ul>";
+            document.getElementById('modalListContent').innerHTML = "<ul>" + todayItems.map(i => `<li style="margin-bottom:8px;">${i.name}</li>`).join('') + "</ul>";
             document.getElementById('notificationModal').style.display = 'flex';
         }
     }
-    window.closeModal = function() {
-        document.getElementById('notificationModal').style.display = 'none';
-    }
+    window.closeModal = function() { document.getElementById('notificationModal').style.display = 'none'; }
 
-    let deferredPrompt;
     if ('serviceWorker' in navigator) navigator.serviceWorker.register('./sw.js');
-
-    window.addEventListener('beforeinstallprompt', (e) => {
-        e.preventDefault();
-        deferredPrompt = e;
-        document.getElementById('installContainer').style.display = 'block';
-    });
-
-    window.installPWA = async function() {
-        if (deferredPrompt) {
-            deferredPrompt.prompt();
-            const { outcome } = await deferredPrompt.userChoice;
-            if (outcome === 'accepted') document.getElementById('installContainer').style.display = 'none';
-            deferredPrompt = null;
-        }
-    }
 
     fetchSheetData();
 </script>
