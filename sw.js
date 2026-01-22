@@ -1,4 +1,4 @@
-const CACHE_NAME = 'plan-dep-2026-v7'; // Изменили версию на v3
+const CACHE_NAME = 'plan-dep-2026-v7';
 const urlsToCache = [
   './',
   './index.html',
@@ -22,7 +22,6 @@ self.addEventListener('activate', function(event) {
       return Promise.all(
         cacheNames.map(function(cacheName) {
           if (cacheName !== CACHE_NAME) {
-            console.log('Удаляем старый кэш:', cacheName);
             return caches.delete(cacheName);
           }
         })
