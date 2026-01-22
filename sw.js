@@ -1,6 +1,4 @@
-// Просто меняем v10 на v11
-const CACHE_NAME = 'plan-dep-2026-v12'; 
-
+const CACHE_NAME = 'plan-dep-2026-v14'; // Новая версия
 const urlsToCache = [
   './',
   './index.html',
@@ -22,7 +20,6 @@ self.addEventListener('activate', function(event) {
     caches.keys().then(function(cacheNames) {
       return Promise.all(
         cacheNames.map(function(cacheName) {
-          // Удаляем все старые версии кэша, кроме текущей (v11)
           if (cacheName !== CACHE_NAME) {
             return caches.delete(cacheName);
           }
