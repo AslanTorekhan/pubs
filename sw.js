@@ -1,4 +1,4 @@
-const CACHE_NAME = 'plan-dep-2026-v20'; // Обновил версию, чтобы сбросить кэш у пользователей
+const CACHE_NAME = 'plan-dep-2026-v21'; // Обновил версию, чтобы сбросить кэш у пользователей
 const urlsToCache = [
   './',
   './index.html',
