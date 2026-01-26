@@ -28,335 +28,315 @@
         body { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif; background-color: var(--bg-color); margin: 0; padding-bottom: 40px; }
         
         /* ШАПКА */
-        header { 
-            background: linear-gradient(135deg, #0984e3, #74b9ff); 
-            color: white; padding: 15px 20px; 
-            position: sticky; top: 0; z-index: 100; 
-            box-shadow: 0 4px 15px rgba(0,0,0,0.1); 
-        }
-        .header-top { display: flex; justify-content: space-between; align-items: center; margin-bottom: 12px; }
-        h1 { margin: 0; font-size: 20px; font-weight: 700; letter-spacing: 0.5px; }
+        .header { background: var(--accent); color: white; padding: 15px 20px; box-shadow: 0 2px 5px rgba(0,0,0,0.1); position: sticky; top: 0; z-index: 100; }
+        .header h1 { margin: 0; font-size: 18px; font-weight: 600; }
+        .header-controls { margin-top: 10px; display: flex; gap: 10px; }
+        .search-box { flex-grow: 1; padding: 8px; border-radius: 6px; border: none; font-size: 14px; }
+        .filter-select { padding: 8px; border-radius: 6px; border: none; font-size: 14px; background: white; }
+
+        /* СПИСОК КАРТОЧЕК */
+        .container { padding: 15px; max-width: 600px; margin: 0 auto; }
         
-        /* БЕГУНОК */
-        .filter-select {
-            width: 100%; padding: 12px; border-radius: 12px; 
-            border: 1px solid rgba(255,255,255,0.4); 
-            background: rgba(255,255,255,0.2); 
-            color: white; font-size: 16px; outline: none;
-            backdrop-filter: blur(10px); font-weight: 500;
-            cursor: pointer;
-        }
-        .filter-select option { color: #333; background: white; }
+        .card { background: var(--card-bg); border-radius: 12px; padding: 15px; margin-bottom: 15px; box-shadow: 0 2px 8px rgba(0,0,0,0.05); transition: transform 0.2s; border-left: 5px solid transparent; }
+        .card:active { transform: scale(0.98); }
 
-        /* СЕТКА (3 КОЛОНКИ) */
-        .grid-container {
-            display: grid;
-            grid-template-columns: 1fr 1fr 1fr; /* 3 равные колонки */
-            gap: 20px;
-            padding: 20px;
-            max-width: 1400px;
-            margin: 0 auto;
-            align-items: start;
-        }
+        /* Цвета статусов (полоска слева) */
+        .status-wait { border-left-color: var(--wait); }
+        .status-work { border-left-color: var(--work); }
+        .status-today { border-left-color: var(--today); }
+        .status-done { border-left-color: var(--done); }
 
-        /* КОЛОНКИ */
-        .col-header {
-            font-size: 14px; font-weight: 700; text-transform: uppercase; 
-            margin-bottom: 15px; padding-bottom: 5px; border-bottom: 2px solid #ddd;
-            display: flex; justify-content: space-between; align-items: center;
-        }
-        .col-today .col-header { color: var(--today); border-color: var(--today); }
-        .col-wait .col-header { color: var(--text-sec); border-color: var(--wait); }
-        .col-done .col-header { color: var(--done); border-color: var(--done); }
-        
-        .counter { background: #eee; padding: 2px 8px; border-radius: 10px; font-size: 12px; color: #555; }
-
-        /* КАРТОЧКА */
-        .card { 
-            background: var(--card-bg); border-radius: 16px; 
-            padding: 15px; margin-bottom: 15px; 
-            box-shadow: 0 4px 10px rgba(0,0,0,0.03); 
-            border-left: 5px solid var(--wait); 
-            transition: transform 0.2s, box-shadow 0.2s;
-            position: relative; overflow: hidden;
-        }
-        .card:hover { transform: translateY(-2px); box-shadow: 0 6px 15px rgba(0,0,0,0.08); }
-
-        /* Стили статусов карточек */
-        .card.status-today, .card.status-work { border-left-color: var(--today); background: #fff5f5; }
-        .card.status-wait { border-left-color: var(--wait); }
-        .card.status-done { border-left-color: var(--done); opacity: 0.8; }
-        
+        .card-cat { font-size: 10px; text-transform: uppercase; color: var(--text-sec); letter-spacing: 1px; margin-bottom: 5px; font-weight: bold; }
+        .card-title { font-size: 16px; font-weight: 600; color: var(--text-main); margin-bottom: 8px; line-height: 1.4; }
         .card-link { text-decoration: none; color: inherit; display: block; }
-        .card-cat { font-size: 10px; text-transform: uppercase; color: var(--text-sec); font-weight: 700; margin-bottom: 6px; letter-spacing: 0.5px; }
-        .card-title { font-size: 15px; font-weight: 600; color: var(--text-main); margin-bottom: 10px; line-height: 1.4; }
+
+        .card-footer { display: flex; justify-content: space-between; align-items: center; margin-top: 10px; font-size: 13px; color: var(--text-sec); border-top: 1px solid #eee; padding-top: 8px; }
+        .card-date { font-weight: 500; display: flex; align-items: center; gap: 5px; }
         
-        .card-footer { display: flex; justify-content: space-between; align-items: center; padding-bottom: 10px; border-bottom: 1px solid rgba(0,0,0,0.05); margin-bottom: 10px; }
-        .card-date { font-size: 12px; font-weight: 500; color: #555; background: rgba(0,0,0,0.05); padding: 4px 8px; border-radius: 6px; }
+        /* Стили для смены даты */
+        .edit-date-btn { background: none; border: none; cursor: pointer; font-size: 16px; opacity: 0.5; padding: 0 5px; }
+        .edit-date-btn:hover { opacity: 1; transform: scale(1.1); }
+        .date-edit-form { display: none; background: #f1f2f6; padding: 10px; border-radius: 8px; margin-top: 10px; }
+        .date-input { width: 100%; padding: 8px; border: 1px solid #ccc; border-radius: 5px; margin-bottom: 5px; box-sizing: border-box;}
+        .save-date-btn { width: 100%; background: var(--done); color: white; border: none; padding: 8px; border-radius: 5px; cursor: pointer; font-weight: bold; }
+
+        /* Комментарии */
+        .comment-section { margin-top: 10px; display: flex; gap: 5px; }
+        .comment-input { flex-grow: 1; padding: 8px; border: 1px solid #dfe6e9; border-radius: 6px; font-size: 13px; }
+        .comment-btn { background: var(--accent); color: white; border: none; padding: 0 12px; border-radius: 6px; cursor: pointer; font-size: 14px; }
         
-        /* Блок комментариев */
-        .comment-display {
-            background: #fff; border: 1px solid #eee; border-radius: 8px; padding: 10px; 
-            font-size: 13px; color: #444; margin-bottom: 10px; display: none;
+        .comment-display { 
+            font-size: 12px; color: #444; background: #f9f9f9; padding: 8px; border-radius: 6px; margin-top: 8px; 
+            display: none; /* Скрыт если пустой */
+            border-left: 2px solid var(--accent);
         }
         .comment-display.active { display: block; }
-        
-        .comment-section { display: flex; gap: 8px; }
-        .comment-input { flex: 1; padding: 8px 12px; border: 1px solid #ddd; border-radius: 20px; font-size: 13px; outline: none; transition: 0.2s; }
-        .comment-input:focus { border-color: var(--accent); }
-        .comment-btn { background: var(--accent); color: white; border: none; border-radius: 50%; width: 34px; height: 34px; cursor: pointer; display: flex; align-items: center; justify-content: center; font-size: 12px; }
 
-        /* АДАПТИВНОСТЬ (МОБИЛЬНЫЙ ВИД) */
-        @media (max-width: 900px) {
-            .grid-container { grid-template-columns: 1fr; gap: 30px; }
-            /* Порядок блоков на телефоне */
-            .col-today { order: 1; }
-            .col-wait { order: 2; }
-            .col-done { order: 3; }
-        }
-
-        #loader { text-align: center; padding: 50px; color: #777; font-weight: 500; }
     </style>
 </head>
 <body>
 
-    <header>
-        <div class="header-top">
-            <h1>План Департамента 2026</h1>
-            <button style="background:none; border:none; color:white; font-size:24px; cursor:pointer;" onclick="hardReload()">↻</button>
+    <div class="header">
+        <h1>🚀 План Департамента 2026</h1>
+        <div class="header-controls">
+            <input type="text" class="search-box" id="searchInput" placeholder="Поиск..." onkeyup="filterData()">
+            <select class="filter-select" id="categorySelect" onchange="filterData(this.value)">
+                <option value="all">Все</option>
+            </select>
         </div>
-        <select id="categorySelect" class="filter-select" onchange="filterData(this.value)">
-            <option value="all">📂 Все Отрасли</option>
-        </select>
-    </header>
-
-    <div id="loader">Загрузка данных...</div>
-    
-    <div class="grid-container" id="mainGrid" style="display:none;">
-        
-        <div class="col-today">
-            <div class="col-header">
-                🔥 Срочно / В работе <span id="count-today" class="counter">0</span>
-            </div>
-            <div id="list-today"></div>
-        </div>
-
-        <div class="col-wait">
-            <div class="col-header">
-                ⏳ Ожидание <span id="count-wait" class="counter">0</span>
-            </div>
-            <div id="list-wait"></div>
-        </div>
-
-        <div class="col-done">
-            <div class="col-header">
-                ✅ Выполнено <span id="count-done" class="counter">0</span>
-            </div>
-            <div id="list-done"></div>
-        </div>
-
     </div>
 
-<script>
-    const SHEET_CSV_URL = 'https://docs.google.com/spreadsheets/d/e/2PACX-1vSSiUUHVFLpn5WE5zwI7UOCNNz4gjENAX4ahMtDO7f8e_qvUpwTqtaBN0nfUzOU5unXMWvzwU5zhSkB/pub?output=csv';
-    const APPS_SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbxpDK0afwiRK9pBXeqt0vCStRzdvucCUgcWsbAsabJpXwbAj0aN3jId5aTqX2fqhJjWhg/exec';
-    
-    let allData = [];
-    const currentYear = new Date().getFullYear();
+    <div class="container" id="content">
+        <div style="text-align:center; color:#999; margin-top:50px;">Загрузка данных...</div>
+    </div>
 
-    function hardReload() {
-        if ('caches' in window) caches.keys().then(names => names.forEach(name => caches.delete(name)));
-        location.reload(true);
-    }
+    <script>
+        // Ссылка на твой Google Script (УЖЕ ВСТАВЛЕНА)
+        const APPS_SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbyshEU0jIAtxReqbB_1ADIAcG9XiQ3D0c5Lbf_Xteid-oW8Te8-mUqAOrmzcjL7cWpzMA/exec'; 
 
-    function fetchSheetData() {
-        Papa.parse(SHEET_CSV_URL, {
-            download: true, header: false,
-            complete: function(results) { parseData(results.data); },
-            error: function() { document.getElementById('loader').innerHTML = "Ошибка загрузки"; }
-        });
-    }
+        const CSV_URL = 'https://docs.google.com/spreadsheets/d/e/2PACX-1vSSiUUHVFLpn5WE5zwI7UOCNNz4gjENAX4ahMtDO7f8e_qvUpwTqtaBN0nfUzOU5unXMWvzwU5zhSkB/pub?output=csv';
 
-    function parseData(rows) {
-        let currentCat = "Общее";
-        let lastTitle = "";
-        allData = [];
+        let allData = [];
 
-        rows.forEach((row, i) => {
-            if (i === 0) return;
-            let name = row[0] ? row[0].trim() : "";
-            let start = row[1] ? row[1].trim() : "";
-            let end = row[2] ? row[2].trim() : "";
-            let link = row[3] ? row[3].trim() : "";
-            let comm = row[4] ? row[4].trim() : "";
-
-            if (name && !start && !end) { currentCat = name; return; }
-            if (!name && (start || end)) name = lastTitle;
-            if (!name) return;
-            lastTitle = name;
-
-            const dStart = parseRusDate(start);
-            const dEnd = parseRusDate(end);
-
-            if (dEnd) {
-                allData.push({
-                    name: name,
-                    category: currentCat,
-                    start: dStart,
-                    end: dEnd,
-                    endTxt: end,
-                    url: link || "https://stat.gov.kz/",
-                    comment: comm
-                });
-            }
-        });
-
-        document.getElementById('loader').style.display = 'none';
-        document.getElementById('mainGrid').style.display = 'grid';
-        updateFilterList();
-        renderCards('all');
-    }
-
-    function parseRusDate(str) {
-        if (!str) return null;
-        str = str.toLowerCase().replace(/\./g, ' ').trim();
-        const numericMatch = str.match(/^(\d{1,2})\s+(\d{1,2})/);
-        if (numericMatch) return new Date(currentYear, parseInt(numericMatch[2]) - 1, parseInt(numericMatch[1]));
-        const months = ["янв", "фев", "мар", "апр", "мая", "июн", "июл", "авг", "сен", "окт", "ноя", "дек"];
-        const parts = str.split(' ');
-        let mIdx = -1;
-        months.forEach((m, i) => { if (parts[1] && parts[1].includes(m)) mIdx = i; });
-        return mIdx !== -1 ? new Date(currentYear, mIdx, parseInt(parts[0])) : null;
-    }
-
-    function getStatus(start, end) {
-        const now = new Date(); now.setHours(0,0,0,0);
-        const dEnd = new Date(end); dEnd.setHours(0,0,0,0);
-        const dStart = start ? new Date(start) : new Date(dEnd); dStart.setHours(0,0,0,0);
-
-        if (now > dEnd) return { text: "ВЫПОЛНЕНО", class: "done", code: "done" };
-        if (now.getTime() === dEnd.getTime()) return { text: "СРОК СЕГОДНЯ", class: "today", code: "today" };
-        if (now >= dStart && now < dEnd) return { text: "В РАБОТЕ", class: "work", code: "work" };
-        return { text: "ОЖИДАНИЕ", class: "wait", code: "wait" };
-    }
-
-    // ГЛАВНАЯ ФУНКЦИЯ ОТРИСОВКИ (СОРТИРОВКА И РАСПРЕДЕЛЕНИЕ)
-    function renderCards(filter) {
-        // Очищаем колонки
-        const listToday = document.getElementById('list-today');
-        const listWait = document.getElementById('list-wait');
-        const listDone = document.getElementById('list-done');
-        listToday.innerHTML = ""; listWait.innerHTML = ""; listDone.innerHTML = "";
-
-        const filtered = filter === 'all' ? allData : allData.filter(d => d.category === filter);
-
-        let countT = 0, countW = 0, countD = 0;
-
-        // Разделяем на массивы для сортировки
-        let itemsToday = [];
-        let itemsWait = [];
-        let itemsDone = [];
-
-        filtered.forEach(item => {
-            const status = getStatus(item.start, item.end);
-            const dataWithStatus = { ...item, statusObj: status };
-
-            if (status.code === 'done') itemsDone.push(dataWithStatus);
-            else if (status.code === 'today' || status.code === 'work') itemsToday.push(dataWithStatus);
-            else itemsWait.push(dataWithStatus);
-        });
-
-        // СОРТИРОВКА
-        // 1. Ожидание: Самые близкие даты сверху (от меньшего к большему)
-        itemsWait.sort((a, b) => a.end - b.end);
-
-        // 2. Выполнено: Самые свежие выполненные сверху (от большего к меньшему)
-        itemsDone.sort((a, b) => b.end - a.end);
-
-        // Отрисовка
-        itemsToday.forEach(item => createCard(item, listToday));
-        itemsWait.forEach(item => createCard(item, listWait));
-        itemsDone.forEach(item => createCard(item, listDone));
-
-        // Счетчики
-        document.getElementById('count-today').innerText = itemsToday.length;
-        document.getElementById('count-wait').innerText = itemsWait.length;
-        document.getElementById('count-done').innerText = itemsDone.length;
-    }
-
-    function createCard(item, container) {
-        const index = allData.indexOf(item); // Находим реальный индекс для ID
-        const cardId = "c-" + index; 
-        
-        const div = document.createElement('div');
-        div.className = `card status-${item.statusObj.class}`;
-        div.innerHTML = `
-            <a href="${item.url}" target="_blank" class="card-link">
-                <div class="card-cat">${item.category}</div>
-                <div class="card-title">${item.name} 🔗</div>
-                <div class="card-footer">
-                    <div class="card-date">📅 ${item.endTxt}</div>
-                </div>
-            </a>
+        // 1. Инициализация при загрузке
+        window.onload = function() {
+            Papa.parse(CSV_URL, {
+                download: true,
+                header: false,
+                complete: function(results) {
+                    processData(results.data);
+                },
+                error: function(err) {
+                    document.getElementById('content').innerHTML = "Ошибка загрузки: " + err;
+                }
+            });
             
-            <div id="box-${cardId}" class="comment-display ${item.comment ? 'active' : ''}">
-                <b>📝 Заметки:</b><br><span id="txt-${cardId}">${item.comment}</span>
-            </div>
+            // Регистрация Service Worker
+            if ('serviceWorker' in navigator) {
+                navigator.serviceWorker.register('sw.js')
+                    .then(() => console.log('SW зарегистрирован'))
+                    .catch(err => console.log('SW ошибка:', err));
+            }
+        };
 
-            <div class="comment-section">
-                <input type="text" class="comment-input" id="inp-${cardId}" placeholder="Комментарий...">
-                <button class="comment-btn" onclick="sendComment('${cardId}', '${item.name.replace(/'/g, "\\'")}', '${item.endTxt}')">➤</button>
-            </div>
-        `;
-        container.appendChild(div);
-    }
+        // 2. Обработка данных
+        function processData(rows) {
+            // Удаляем первую строку (заголовки)
+            const dataRows = rows.slice(1);
+            
+            allData = dataRows.map(row => {
+                if(!row[0]) return null;
 
-    function sendComment(cardId, itemName, itemDate) {
-        const input = document.getElementById(`inp-${cardId}`);
-        const textBox = document.getElementById(`txt-${cardId}`);
-        const boxDiv = document.getElementById(`box-${cardId}`);
-        const text = input.value.trim();
+                const dateStr = row[2] ? row[2].trim() : "";
+                const statusObj = getStatus(dateStr);
 
-        if (!text) return;
+                return {
+                    name: row[0],
+                    url: row[1] || "#",
+                    endTxt: dateStr,
+                    category: row[3] || "Общее",
+                    comment: row[4] || "",
+                    statusObj: statusObj
+                };
+            }).filter(item => item !== null);
 
-        const btn = input.nextElementSibling;
-        btn.innerHTML = "⏳";
-        btn.disabled = true;
+            updateFilterList();
+            renderCards(allData);
+        }
 
-        const now = new Date();
-        const timeStr = now.getDate() + "." + (now.getMonth()+1) + " " + now.getHours() + ":" + (now.getMinutes()<10?'0':'') + now.getMinutes();
-        const newEntry = `[${timeStr}] ${text}`;
-        
-        textBox.innerText = textBox.innerText ? textBox.innerText + "\n" + newEntry : newEntry;
-        boxDiv.classList.add('active');
-        input.value = "";
+        // 3. Определение статуса по дате
+        function getStatus(dateString) {
+            if (!dateString) return { class: "wait", text: "Без даты" };
+            
+            // Парсим DD.MM.YYYY
+            const parts = dateString.split('.');
+            if(parts.length < 3) return { class: "wait", text: dateString };
 
-        fetch(APPS_SCRIPT_URL, {
-            method: 'POST', mode: 'no-cors',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({ name: itemName, date: itemDate, comment: text })
-        }).then(() => {
-            btn.innerHTML = "✅";
-            setTimeout(() => { btn.innerHTML = "➤"; btn.disabled = false; }, 2000);
-        }).catch(err => {
-            alert("Ошибка сети.");
-            btn.innerHTML = "➤"; btn.disabled = false;
-        });
-    }
+            const targetDate = new Date(`${parts[2]}-${parts[1]}-${parts[0]}`);
+            const today = new Date();
+            today.setHours(0,0,0,0);
 
-    function updateFilterList() {
-        const cats = [...new Set(allData.map(d => d.category))];
-        const select = document.getElementById('categorySelect');
-        select.innerHTML = '<option value="all">📂 Все Отрасли</option>';
-        cats.forEach(c => {
-            const opt = document.createElement('option');
-            opt.value = c; opt.innerText = c; select.appendChild(opt);
-        });
-    }
+            const diffTime = targetDate - today;
+            const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24));
 
-    window.filterData = function(val) { renderCards(val); }
-    if ('serviceWorker' in navigator) navigator.serviceWorker.register('./sw.js');
-    fetchSheetData();
-</script>
+            if (diffDays < 0) return { class: "done", text: "Завершено" };
+            if (diffDays === 0) return { class: "today", text: "Сегодня!" };
+            if (diffDays <= 7) return { class: "work", text: "Скоро" };
+            return { class: "wait", text: "В плане" };
+        }
+
+        // 4. Отрисовка карточек
+        function renderCards(data) {
+            const container = document.getElementById('content');
+            container.innerHTML = "";
+            data.forEach(item => createCard(item, container));
+        }
+
+        function createCard(item, container) {
+            const index = allData.indexOf(item); 
+            const cardId = "c-" + index; 
+            
+            // Экранируем кавычки для безопасности
+            const safeName = item.name.replace(/'/g, "\\'").replace(/"/g, "&quot;");
+
+            const div = document.createElement('div');
+            div.className = `card status-${item.statusObj.class}`;
+            div.innerHTML = `
+                <div style="position:relative;">
+                    <a href="${item.url}" target="_blank" class="card-link">
+                        <div class="card-cat">${item.category}</div>
+                        <div class="card-title">${item.name} 🔗</div>
+                    </a>
+                    
+                    <div class="card-footer">
+                        <div class="card-date">
+                            📅 <span id="date-val-${cardId}">${item.endTxt}</span>
+                            <button class="edit-date-btn" onclick="openDateChanger('${cardId}')">✏️</button>
+                        </div>
+                    </div>
+
+                    <div id="date-form-${cardId}" class="date-edit-form">
+                        <label style="font-size:12px; color:#555;">Новая дата посадки:</label>
+                        <input type="date" id="date-input-${cardId}" class="date-input">
+                        <button class="save-date-btn" onclick="submitNewDate('${cardId}', '${safeName}', '${item.endTxt}')">Сохранить дату</button>
+                        <div style="text-align:center; margin-top:5px;">
+                            <span onclick="document.getElementById('date-form-${cardId}').style.display='none'" style="font-size:12px; color:#999; cursor:pointer;">Отмена</span>
+                        </div>
+                    </div>
+                </div>
+                
+                <div id="box-${cardId}" class="comment-display ${item.comment ? 'active' : ''}">
+                    <b>📝 История / Заметки:</b><br><span id="txt-${cardId}" style="white-space: pre-wrap;">${item.comment}</span>
+                </div>
+
+                <div class="comment-section">
+                    <input type="text" class="comment-input" id="inp-${cardId}" placeholder="Комментарий...">
+                    <button class="comment-btn" onclick="sendComment('${cardId}', '${safeName}', '${item.endTxt}')">➤</button>
+                </div>
+            `;
+            container.appendChild(div);
+        }
+
+        // 5. Функция открытия формы даты
+        function openDateChanger(cardId) {
+            document.querySelectorAll('.date-edit-form').forEach(el => el.style.display = 'none');
+            document.getElementById(`date-form-${cardId}`).style.display = 'block';
+        }
+
+        // 6. Функция ОТПРАВКИ новой даты
+        function submitNewDate(cardId, name, oldDateRaw) {
+            const dateInput = document.getElementById(`date-input-${cardId}`);
+            const newDateIso = dateInput.value; 
+
+            if (!newDateIso) { alert("Пожалуйста, выберите дату."); return; }
+
+            const btn = dateInput.nextElementSibling;
+            const originalText = btn.innerText;
+            btn.innerText = "Сохранение...";
+            btn.disabled = true;
+
+            fetch(APPS_SCRIPT_URL, {
+                method: 'POST', mode: 'no-cors',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ 
+                    type: 'change_date',
+                    name: name, 
+                    oldDate: oldDateRaw, 
+                    newDate: newDateIso 
+                })
+            }).then(() => {
+                const parts = newDateIso.split('-');
+                const newDateRus = `${parts[2]}.${parts[1]}.${parts[0]}`;
+                
+                const dateSpan = document.getElementById(`date-val-${cardId}`);
+                dateSpan.innerText = newDateRus;
+                dateSpan.style.color = "#d63031";
+                dateSpan.style.fontWeight = "bold";
+
+                const textBox = document.getElementById(`txt-${cardId}`);
+                const boxDiv = document.getElementById(`box-${cardId}`);
+                const now = new Date();
+                const timeStr = now.getHours() + ":" + (now.getMinutes()<10?'0':'') + now.getMinutes();
+                
+                const historyText = `[${timeStr}] 📅 Перенос: ${oldDateRaw} ➝ ${newDateRus}`;
+                textBox.innerText = textBox.innerText ? textBox.innerText + "\n" + historyText : historyText;
+                boxDiv.classList.add('active');
+
+                document.getElementById(`date-form-${cardId}`).style.display = 'none';
+                btn.innerText = originalText;
+                btn.disabled = false;
+
+                alert("Дата успешно изменена!");
+
+            }).catch(err => {
+                alert("Ошибка соединения: " + err);
+                btn.innerText = originalText;
+                btn.disabled = false;
+            });
+        }
+
+        // 7. Функция отправки комментария
+        function sendComment(cardId, itemName, itemDate) {
+            const input = document.getElementById(`inp-${cardId}`);
+            const textBox = document.getElementById(`txt-${cardId}`);
+            const boxDiv = document.getElementById(`box-${cardId}`);
+            const text = input.value.trim();
+
+            if (!text) return;
+            
+            const btn = input.nextElementSibling;
+            btn.innerHTML = "⏳";
+            btn.disabled = true;
+
+            const now = new Date();
+            const timeStr = now.getDate() + "." + (now.getMonth()+1) + " " + now.getHours() + ":" + (now.getMinutes()<10?'0':'') + now.getMinutes();
+            const newEntry = `[${timeStr}] ${text}`;
+            
+            textBox.innerText = textBox.innerText ? textBox.innerText + "\n" + newEntry : newEntry;
+            boxDiv.classList.add('active');
+            input.value = "";
+
+            fetch(APPS_SCRIPT_URL, {
+                method: 'POST', mode: 'no-cors',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ 
+                    type: 'comment',
+                    name: itemName, 
+                    date: itemDate, 
+                    comment: text 
+                })
+            }).then(() => {
+                btn.innerHTML = "✅";
+                setTimeout(() => { btn.innerHTML = "➤"; btn.disabled = false; }, 2000);
+            }).catch(err => {
+                alert("Ошибка сети.");
+                btn.innerHTML = "➤"; btn.disabled = false;
+            });
+        }
+
+        // Фильтрация
+        function updateFilterList() {
+            const cats = [...new Set(allData.map(d => d.category))];
+            const select = document.getElementById('categorySelect');
+            select.innerHTML = '<option value="all">Все</option>';
+            cats.forEach(c => {
+                const opt = document.createElement('option');
+                opt.value = c; opt.innerText = c; select.appendChild(opt);
+            });
+        }
+
+        function filterData() {
+            const searchVal = document.getElementById('searchInput').value.toLowerCase();
+            const catVal = document.getElementById('categorySelect').value;
+
+            const filtered = allData.filter(item => {
+                const matchSearch = item.name.toLowerCase().includes(searchVal);
+                const matchCat = catVal === 'all' || item.category === catVal;
+                return matchSearch && matchCat;
+            });
+            renderCards(filtered);
+        }
+
+    </script>
 </body>
 </html>
